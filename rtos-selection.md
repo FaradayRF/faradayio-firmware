@@ -24,3 +24,14 @@ An RTOS or simple scheduler is desired to provide a layer of abstraction and pro
   * FreeRTOS Open Source License?
   * Use on MSP430 line devices
   * Well supported but fairly large?
+
+#### MCU Operting Systems Comparison
+
+Source of this chart is: https://riot-os.org/#features
+
+![RIOT OS Comparison Chart](images/RIOT-Chart.png)
+
+
+### RIOT implementation
+
+RIOT looks like a great first path to follow for the Faraday firmware needed. I will be following the [RIOT - OS Tutorials](https://github.com/RIOT-OS/Tutorials/blob/master/README.md) and installing the needed software/source into a Lubuntu virtual box instance.
