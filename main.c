@@ -39,6 +39,9 @@
 //******************************************************************************
 void main (void)
 {
+    //Stop WDT
+    WDT_A_hold(WDT_A_BASE);
+
     // Infinite main loop
     while(1){
 
