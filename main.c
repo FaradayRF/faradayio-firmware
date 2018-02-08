@@ -39,4 +39,8 @@
 //******************************************************************************
 void main (void)
 {
+    // Infinite main loop
+    while(1){
+
+    } // END Infinite main loop
 }
