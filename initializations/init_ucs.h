@@ -8,8 +8,14 @@
 #ifndef INITIALIZATIONS_INIT_UCS_H_
 #define INITIALIZATIONS_INIT_UCS_H_
 
+//*****************************************************************************
+//
+//Variable to store status of Oscillator fault flags
+//
+//*****************************************************************************
+uint16_t status;
 
-
+unsigned char initialize_ucs(void);
 
 
 #endif /* INITIALIZATIONS_INIT_UCS_H_ */

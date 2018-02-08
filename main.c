@@ -31,6 +31,8 @@
  * --/COPYRIGHT--*/
 
 #include "driverlib.h"
+#include "initializations/init_ucs.h" // @TODO Make this a project global initialization directory for the linker.
+
 
 //******************************************************************************
 //!
@@ -42,8 +44,34 @@ void main (void)
     //Stop WDT
     WDT_A_hold(WDT_A_BASE);
 
+    //Initialize UCS to 12MHz
+    initialize_ucs();
+
+
+    // Enable global interrupt
+    __bis_SR_register(GIE);
+
     // Infinite main loop
     while(1){
 
+
+        __no_operation();
     } // END Infinite main loop
+}
+
+
+#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
+#pragma vector=UNMI_VECTOR
+__interrupt
+#elif defined(__GNUC__)
+__attribute__((interrupt(UNMI_VECTOR)))
+#endif
+void NMI_ISR(void)
+{
+  do {
+    // If it still can't clear the oscillator fault flags after the timeout,
+    // trap and wait here.
+    status = UCS_clearAllOscFlagsWithTimeout(1000);
+    __no_operation();
+  } while(status != 0);
 }
