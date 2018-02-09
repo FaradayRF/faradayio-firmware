@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['ucs',['ucs',['../group__ucs__api.html',1,'']]],
-  ['usci_5fa_5fspi',['usci_a_spi',['../group__usci__a__spi__api.html',1,'']]],
-  ['usci_5fa_5fuart',['usci_a_uart',['../group__usci__a__uart__api.html',1,'']]],
-  ['usci_5fb_5fi2c',['usci_b_i2c',['../group__usci__b__i2c__api.html',1,'']]],
-  ['usci_5fb_5fspi',['usci_b_spi',['../group__usci__b__spi__api.html',1,'']]]
+  ['tec',['tec',['../group__tec__api.html',1,'']]],
+  ['timer_5fa',['timer_a',['../group__timer__a__api.html',1,'']]],
+  ['timer_5fb',['timer_b',['../group__timer__b__api.html',1,'']]],
+  ['timer_5fd',['timer_d',['../group__timer__d__api.html',1,'']]],
+  ['tlv',['tlv',['../group__tlv__api.html',1,'']]]
 ];
