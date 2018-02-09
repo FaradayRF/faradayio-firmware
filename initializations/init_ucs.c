@@ -1,29 +1,31 @@
-/*
- * init_ucs.c
+/**
+ * @file init_ucs.c
+ * @brief This header file contains all the required high level functions used
+ * to initialize the Unified Clock System (UCS) of the CC430.
  *
- *  Created on: Feb 7, 2018
- *      Author: KB1LQ
+ * @author Brenton Salmi, KB1LQD
+ *
+ * @date 2/8/2018
  */
 
 
-
-
-//******************************************************************************
 #include "driverlib.h"
 #include "init_ucs.h"
-//*****************************************************************************
 
 
-//Target frequency for MCLK in kHz
-//
-//*****************************************************************************
+/**
+ * Target frequency for MCLK in kHz
+ */
 #define UCS_MCLK_DESIRED_FREQUENCY_IN_KHZ   12000
 
 //*****************************************************************************
 //
-//MCLK/FLLRef Ratio
+//
 //
 //*****************************************************************************
+/**
+ * MCLK/FLLRef Ratio
+ */
 #define UCS_MCLK_FLLREF_RATIO   366
 
 

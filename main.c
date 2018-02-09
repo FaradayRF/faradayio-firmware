@@ -30,16 +30,25 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * --/COPYRIGHT--*/
 
+/**
+ * @file main.c
+ * @brief This source file contains the main functionality of the program.
+ *
+ * @author Brenton Salmi, KB1LQD
+ *
+ * @date 2/8/2018
+ */
 
 #include "driverlib.h"
 #include "initializations/init_ucs.h" // @TODO Make this a project global initialization directory for the linker.
 
-
-//******************************************************************************
-//!
-//!   Empty Project that includes driverlib
-//!
-//******************************************************************************
+/**
+ * This function is the main function of the program. It contains an infinite
+ * loop that iterates indefinitely.
+ * @author Brenton Salmi, KB1LQD
+ * @return Void
+ * @date 2/8/2018
+ */
 void main (void)
 {
     //Stop WDT
@@ -61,6 +70,14 @@ void main (void)
 }
 
 
+/**
+ * This function is the interrupt handler for the Unified Clock System (UCS).
+ * It is only used if the clock(s) fail to initialize and fault, an infinite loop
+ * exists to "trap"  the program counter.
+ * @author Brenton Salmi, KB1LQD
+ * @return Void
+ * @date 2/8/2018
+ */
 #if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
 #pragma vector=UNMI_VECTOR
 __interrupt

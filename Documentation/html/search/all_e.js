@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['tec',['tec',['../group__tec__api.html',1,'']]],
-  ['timer_5fa',['timer_a',['../group__timer__a__api.html',1,'']]],
-  ['timer_5fb',['timer_b',['../group__timer__b__api.html',1,'']]],
-  ['timer_5fd',['timer_d',['../group__timer__d__api.html',1,'']]],
-  ['tlv',['tlv',['../group__tlv__api.html',1,'']]]
+  ['sd24_5fb',['sd24_b',['../group__sd24__b__api.html',1,'']]],
+  ['sfr',['sfr',['../group__sfr__api.html',1,'']]],
+  ['status',['status',['../init__ucs_8h.html#a5393c99e246925076b1dfd69a64177ef',1,'init_ucs.h']]],
+  ['sysctl',['sysctl',['../group__sysctl__api.html',1,'']]]
 ];
