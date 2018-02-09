@@ -41,6 +41,8 @@
 
 #include "driverlib.h"
 #include "initializations/init_ucs.h" // @TODO Make this a project global initialization directory for the linker.
+#include "initializations/init_spi.h" // @TODO Make this a project global initialization directory for the linker.
+#include "initializations/init_gpio.h" // @TODO Make this a project global initialization directory for the linker.
 
 /**
  * This function is the main function of the program. It contains an infinite
@@ -56,6 +58,10 @@ void main (void)
 
     //Initialize UCS to 12MHz
     initialize_ucs();
+
+    //Initialize SPI
+    init_gpio_spi();
+    init_spi();
 
 
     // Enable global interrupt

@@ -23,6 +23,15 @@ extern uint8_t receiveData;
  */
 extern uint8_t returnValue;
 
+/**
+ * This function initializes the CC430 SPI hardware on the USCI B peripheral
+ * hardware in SPI mode.
+ * @author Brenton Salmi, KB1LQD
+ * @return False
+ * @date 2/9/2018
+ */
+unsigned char init_spi(void);
+
 
 
 #endif /* INITIALIZATIONS_INIT_SPI_H_ */

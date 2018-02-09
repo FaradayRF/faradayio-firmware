@@ -43,13 +43,13 @@ unsigned char init_gpio_spi(void){
         );
 
 
-    //P3.5,4,0 option select
-    /*
+    //option select input
+
     GPIO_setAsPeripheralModuleFunctionInputPin(
-        GPIO_PORT_P3,
-        GPIO_PIN1 + GPIO_PIN2 + GPIO_PIN3
+        GPIO_PORT_P1,
+        GPIO_PIN2
         );
-    */
+
 
     return 0;
 }
