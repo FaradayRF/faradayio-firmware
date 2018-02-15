@@ -67,6 +67,18 @@ void main (void)
     // Enable global interrupt
     __bis_SR_register(GIE);
 
+    //Test
+    //USCI_A0 TX buffer ready?
+    unsigned char i;
+    for(i=0;i<256;i++){
+        while (!USCI_B_SPI_getInterruptStatus(USCI_B0_BASE,
+                   USCI_B_SPI_TRANSMIT_INTERRUPT)) ;
+
+        //Transmit Data to slave
+        transmitData = i;
+        USCI_B_SPI_transmitData(USCI_B0_BASE, transmitData);
+    }
+
     // Infinite main loop
     while(1){
 
@@ -117,21 +129,12 @@ void USCI_B0_ISR (void)
     switch (__even_in_range(UCB0IV,4)){
         //Vector 2 - RXIFG
         case 2:
-            __no_operation();
             //USCI_A0 TX buffer ready?
-
             while (!USCI_B_SPI_getInterruptStatus(USCI_B0_BASE,
                        USCI_B_SPI_TRANSMIT_INTERRUPT)) ;
 
+            //Copy received byte buffer into global variable
             receiveData = USCI_B_SPI_receiveData(USCI_B0_BASE);
-
-            //Increment data
-            transmitData++;
-
-            //Send next value
-            USCI_B_SPI_transmitData(USCI_B0_BASE,
-            transmitData
-            );
 
             //Delay between transmissions for slave to process information
             __delay_cycles(40);

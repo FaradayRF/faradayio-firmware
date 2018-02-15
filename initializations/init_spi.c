@@ -40,26 +40,16 @@ unsigned char init_spi(void){
     USCI_B_SPI_clearInterrupt(USCI_B0_BASE, USCI_B_SPI_RECEIVE_INTERRUPT);
     USCI_B_SPI_enableInterrupt(USCI_B0_BASE, USCI_B_SPI_RECEIVE_INTERRUPT);
 
-    //Now with SPI signals initialized, reset slave
-    /*
-    GPIO_setOutputLowOnPin(
-        GPIO_PORT_P1,
-        GPIO_PIN1
-        );
-        */
-
-    //Wait for slave to initialize
-    __delay_cycles(100);
-
     //Initialize data values
     transmitData = 0x00;
 
-    //USCI_A0 TX buffer ready?
-    while (!USCI_B_SPI_getInterruptStatus(USCI_B0_BASE,
-               USCI_B_SPI_TRANSMIT_INTERRUPT)) ;
-
-    //Transmit Data to slave
-    USCI_B_SPI_transmitData(USCI_B0_BASE, transmitData);
+//    // Example Transmission
+//    //USCI_A0 TX buffer ready?
+//    while (!USCI_B_SPI_getInterruptStatus(USCI_B0_BASE,
+//               USCI_B_SPI_TRANSMIT_INTERRUPT)) ;
+//
+//    //Transmit Data to slave
+//    USCI_B_SPI_transmitData(USCI_B0_BASE, transmitData);
 
     return 0;
 }
