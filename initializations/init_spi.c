@@ -30,7 +30,7 @@ unsigned char init_spi(void){
     returnValue =  USCI_B_SPI_initMaster(USCI_B0_BASE, &param);
 
     if (STATUS_FAIL == returnValue){
-        return;
+        return 1;
     }
 
     //Enable SPI module
@@ -47,6 +47,19 @@ unsigned char init_spi(void){
         GPIO_PIN1
         );
         */
+
+    //Wait for slave to initialize
+    __delay_cycles(100);
+
+    //Initialize data values
+    transmitData = 0x00;
+
+    //USCI_A0 TX buffer ready?
+    while (!USCI_B_SPI_getInterruptStatus(USCI_B0_BASE,
+               USCI_B_SPI_TRANSMIT_INTERRUPT)) ;
+
+    //Transmit Data to slave
+    USCI_B_SPI_transmitData(USCI_B0_BASE, transmitData);
 
     return 0;
 }

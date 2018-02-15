@@ -17,18 +17,18 @@ unsigned char init_gpio_spi(void){
      * HOLD = P5.6
      */
 
-    //Set initial GPIO output values (Needed with ISCI B operation?)
-    // SCLK
-    GPIO_setOutputHighOnPin(
-        GPIO_PORT_P1,
-        GPIO_PIN4
-        );
-
-    // MOSI
-    GPIO_setOutputHighOnPin(
-        GPIO_PORT_P1,
-        GPIO_PIN3
-        );
+//    //Set initial GPIO output values (Needed with ISCI B operation?)
+//    // SCLK
+//    GPIO_setOutputHighOnPin(
+//        GPIO_PORT_P1,
+//        GPIO_PIN4
+//        );
+//
+//    // MOSI
+//    GPIO_setOutputHighOnPin(
+//        GPIO_PORT_P1,
+//        GPIO_PIN3
+//        );
 
     // CS
     GPIO_setOutputHighOnPin(
@@ -36,11 +36,11 @@ unsigned char init_gpio_spi(void){
         GPIO_PIN5
         );
 
-    // SCLK
-    GPIO_setOutputHighOnPin(
-        GPIO_PORT_P5,
-        GPIO_PIN6
-        );
+//    // SCLK
+//    GPIO_setOutputHighOnPin(
+//        GPIO_PORT_P5,
+//        GPIO_PIN6
+//        );
 
 
     //option select input
@@ -48,6 +48,12 @@ unsigned char init_gpio_spi(void){
     GPIO_setAsPeripheralModuleFunctionInputPin(
         GPIO_PORT_P1,
         GPIO_PIN2
+        );
+
+    //option select
+    GPIO_setAsPeripheralModuleFunctionOutputPin(
+        GPIO_PORT_P1,
+        GPIO_PIN3 + GPIO_PIN4
         );
 
 

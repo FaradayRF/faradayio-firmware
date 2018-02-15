@@ -117,8 +117,9 @@ void USCI_B0_ISR (void)
     switch (__even_in_range(UCB0IV,4)){
         //Vector 2 - RXIFG
         case 2:
+            __no_operation();
             //USCI_A0 TX buffer ready?
-            /*
+
             while (!USCI_B_SPI_getInterruptStatus(USCI_B0_BASE,
                        USCI_B_SPI_TRANSMIT_INTERRUPT)) ;
 
@@ -134,7 +135,7 @@ void USCI_B0_ISR (void)
 
             //Delay between transmissions for slave to process information
             __delay_cycles(40);
-            */
+
 
             break;
         default: break;
