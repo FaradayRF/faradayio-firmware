@@ -41,6 +41,8 @@
 
 #include "driverlib.h"
 #include "initializations/init_ucs.h" // @TODO Make this a project global initialization directory for the linker.
+#include "initializations/init_spi.h" // @TODO Make this a project global initialization directory for the linker.
+#include "initializations/init_gpio.h" // @TODO Make this a project global initialization directory for the linker.
 
 /**
  * This function is the main function of the program. It contains an infinite
@@ -57,9 +59,25 @@ void main (void)
     //Initialize UCS to 12MHz
     initialize_ucs();
 
+    //Initialize SPI
+    init_gpio_spi();
+    init_spi();
+
 
     // Enable global interrupt
     __bis_SR_register(GIE);
+
+    //Test
+    //USCI_A0 TX buffer ready?
+    unsigned char i;
+    for(i=0;i<256;i++){
+        while (!USCI_B_SPI_getInterruptStatus(USCI_B0_BASE,
+                   USCI_B_SPI_TRANSMIT_INTERRUPT)) ;
+
+        //Transmit Data to slave
+        transmitData = i;
+        USCI_B_SPI_transmitData(USCI_B0_BASE, transmitData);
+    }
 
     // Infinite main loop
     while(1){
@@ -92,4 +110,37 @@ void NMI_ISR(void)
     status = UCS_clearAllOscFlagsWithTimeout(1000);
     __no_operation();
   } while(status != 0);
+}
+
+
+/**
+ * This is the USCI_B0 interrupt vector service routine.
+ * @author Brenton Salmi, KB1LQD
+ * @date 2/9/2018
+ */
+#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
+#pragma vector=USCI_B0_VECTOR
+__interrupt
+#elif defined(__GNUC__)
+__attribute__((interrupt(USCI_B0_VECTOR)))
+#endif
+void USCI_B0_ISR (void)
+{
+    switch (__even_in_range(UCB0IV,4)){
+        //Vector 2 - RXIFG
+        case 2:
+            //USCI_A0 TX buffer ready?
+            while (!USCI_B_SPI_getInterruptStatus(USCI_B0_BASE,
+                       USCI_B_SPI_TRANSMIT_INTERRUPT)) ;
+
+            //Copy received byte buffer into global variable
+            receiveData = USCI_B_SPI_receiveData(USCI_B0_BASE);
+
+            //Delay between transmissions for slave to process information
+            __delay_cycles(40);
+
+
+            break;
+        default: break;
+    }
 }
