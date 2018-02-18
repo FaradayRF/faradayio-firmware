@@ -44,7 +44,7 @@
 #include "initializations/init_spi.h" // @TODO Make this a project global initialization directory for the linker.
 #include "initializations/init_gpio.h" // @TODO Make this a project global initialization directory for the linker.
 #include "initializations/init_uart.h" // @TODO Make this a project global initialization directory for the linker.
-
+#include "uart.h"
 
 /**
  * This function is the main function of the program. It contains an infinite
@@ -75,8 +75,7 @@ void main (void)
     for(i=0;i<255;i++){
     uarttransmitData = i;                      // Increment TX data
     // Load data onto buffer
-    USCI_A_UART_transmitData(USCI_A0_BASE,
-         uarttransmitData);
+    uarttransmitbyte(uarttransmitData);
     }
 
     // Infinite main loop
