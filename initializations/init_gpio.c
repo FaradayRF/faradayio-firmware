@@ -57,5 +57,12 @@ unsigned char init_gpio_spi(void){
         );
 
 
+    //P1.5,6 = USCI_A0 RXD/TXD UART
+    GPIO_setAsPeripheralModuleFunctionInputPin(
+        GPIO_PORT_P1,
+        GPIO_PIN5 + GPIO_PIN6
+        );
+
+
     return 0;
 }

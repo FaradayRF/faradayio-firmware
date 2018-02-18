@@ -8,9 +8,11 @@
 #ifndef INITIALIZATIONS_INIT_UART_H_
 #define INITIALIZATIONS_INIT_UART_H_
 
-extern uartreceivedData;
-extern uarttransmitData;
-extern check;
+extern uint8_t uartreceivedData;
+extern uint8_t uarttransmitData;
+extern uint8_t check;
 
+
+unsigned char init_uart(void);
 
 #endif /* INITIALIZATIONS_INIT_UART_H_ */
