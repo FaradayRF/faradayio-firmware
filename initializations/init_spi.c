@@ -1,8 +1,11 @@
-/*
- * init_spi.c
+/**
+ * @file init_spi.c
+ * @brief This header file contains initialization functions to enable
+ * the SPI hardware of the CC430 for use on Faraday.
  *
- *  Created on: Feb 9, 2018
- *      Author: KB1LQ
+ * @author Brenton Salmi, KB1LQD
+ *
+ * @date 2/17/2018
  */
 
 #include "driverlib.h"

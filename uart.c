@@ -1,19 +1,23 @@
-/*
- * uart.c
+/**
+ * @file uart.c
+ * @brief This header file contains high level abstraction functions
+ * of the UART of the CC430 for use on Faraday.
  *
- *  Created on: Feb 17, 2018
- *      Author: KB1LQ
+ * @author Brenton Salmi, KB1LQD
+ *
+ * @date 2/17/2018
  */
 
 #include "driverlib.h"
 #include "uart.h"
 
-extern
 
 unsigned char uarttransmitbyte(unsigned char databyte){
     USCI_A_UART_transmitData(
             USCI_A0_BASE,
             databyte);
+
+    return 0;
 }
 
 unsigned char uartselftest(void){
@@ -27,5 +31,7 @@ unsigned char uartselftest(void){
 
     }
     __no_operation();
+
+    return 0;
 }
 

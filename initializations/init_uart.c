@@ -1,37 +1,26 @@
-/*
- * init_uart.c
+/**
+ * @file init_uart.h
+ * @brief This header file contains initialization functions to enable
+ * the UART hardware of the CC430 for use on Faraday.
  *
- *  Created on: Feb 17, 2018
- *      Author: KB1LQ
+ * @author Brenton Salmi, KB1LQD
+ *
+ * @date 2/17/2018
  */
 
 
 #include "driverlib.h"
 
-//*****************************************************************************
-//
-//Select Baud rate
-//
-//*****************************************************************************
-#define BAUD_RATE                               9600
-//*****************************************************************************
-//
-//Initialize received data
-//
-//*****************************************************************************
-uint8_t uartreceivedData = 0x00;
-//*****************************************************************************
-//
-//Initialize trasnmit data
-//
-//*****************************************************************************
-uint8_t uarttransmitData = 0x00;
+/**
+ * Desired baudrate
+ */
+#define BAUD_RATE                               115200
 
-uint8_t check = 0;
+
+uint8_t uartreceivedData = 0x00;
+
 
 unsigned char init_uart(void){
-    //Baudrate = 9600, clock freq = 1.048MHz
-    //UCBRx = 109, UCBRFx = 0, UCBRSx = 2, UCOS16 = 0
     USCI_A_UART_initParam param = {0};
     param.selectClockSource = USCI_A_UART_CLOCKSOURCE_SMCLK;
     param.clockPrescalar = 104;
@@ -43,8 +32,9 @@ unsigned char init_uart(void){
     param.uartMode = USCI_A_UART_MODE;
     param.overSampling = USCI_A_UART_LOW_FREQUENCY_BAUDRATE_GENERATION;
 
+
     if (STATUS_FAIL == USCI_A_UART_init(USCI_A0_BASE, &param)){
-        return;
+        return 0;
     }
 
     //Enable UART module for operation
@@ -55,4 +45,6 @@ unsigned char init_uart(void){
         USCI_A_UART_RECEIVE_INTERRUPT);
     USCI_A_UART_enableInterrupt(USCI_A0_BASE,
         USCI_A_UART_RECEIVE_INTERRUPT);
+
+    return 0;
 }
