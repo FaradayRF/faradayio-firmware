@@ -72,7 +72,7 @@ void main (void)
 
     //Test
     unsigned char i;
-    for(i=0;i<256;i++){
+    for(i=0;i<255;i++){
     uarttransmitData = i;                      // Increment TX data
     // Load data onto buffer
     USCI_A_UART_transmitData(USCI_A0_BASE,
