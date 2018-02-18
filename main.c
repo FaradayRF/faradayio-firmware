@@ -43,6 +43,8 @@
 #include "initializations/init_ucs.h" // @TODO Make this a project global initialization directory for the linker.
 #include "initializations/init_spi.h" // @TODO Make this a project global initialization directory for the linker.
 #include "initializations/init_gpio.h" // @TODO Make this a project global initialization directory for the linker.
+#include "initializations/init_uart.h" // @TODO Make this a project global initialization directory for the linker.
+#include "uart.h"
 
 /**
  * This function is the main function of the program. It contains an infinite
@@ -62,22 +64,14 @@ void main (void)
     //Initialize SPI
     init_gpio_spi();
     init_spi();
+    init_uart();
 
 
     // Enable global interrupt
     __bis_SR_register(GIE);
 
     //Test
-    //USCI_A0 TX buffer ready?
-    unsigned char i;
-    for(i=0;i<256;i++){
-        while (!USCI_B_SPI_getInterruptStatus(USCI_B0_BASE,
-                   USCI_B_SPI_TRANSMIT_INTERRUPT)) ;
-
-        //Transmit Data to slave
-        transmitData = i;
-        USCI_B_SPI_transmitData(USCI_B0_BASE, transmitData);
-    }
+    uartselftest();
 
     // Infinite main loop
     while(1){
@@ -144,3 +138,27 @@ void USCI_B0_ISR (void)
         default: break;
     }
 }
+
+//******************************************************************************
+//
+//This is the USCI_A0 interrupt vector service routine.
+//
+//******************************************************************************
+#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
+#pragma vector=USCI_A0_VECTOR
+__interrupt
+#elif defined(__GNUC__)
+__attribute__((interrupt(USCI_A0_VECTOR)))
+#endif
+void USCI_A0_ISR (void)
+{
+    switch (__even_in_range(UCA0IV,4)){
+        //Vector 2 - RXIFG
+        case 2:
+            uartreceivedData = USCI_A_UART_receiveData(USCI_A0_BASE);
+            __no_operation();
+            break;
+        default: break;
+    }
+}
+
