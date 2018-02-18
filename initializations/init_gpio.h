@@ -1,8 +1,11 @@
-/*
- * init_gpio.h
+/**
+ * @file init_gpio.h
+ * @brief This header file contains all the required high level functions used
+ * to initialize the GPIO ports of the CC430 for use on Faraday.
  *
- *  Created on: Feb 9, 2018
- *      Author: KB1LQ
+ * @author Brenton Salmi, KB1LQD
+ *
+ * @date 2/17/2018
  */
 
 #ifndef INITIALIZATIONS_INIT_GPIO_H_
