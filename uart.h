@@ -8,8 +8,9 @@
 #ifndef UART_H_
 #define UART_H_
 
-
+extern uint8_t uartreceivedData;
 
 unsigned char uarttransmitbyte(unsigned char databyte);
+unsigned char uartselftest(void);
 
 #endif /* UART_H_ */

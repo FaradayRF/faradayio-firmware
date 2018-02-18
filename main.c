@@ -71,12 +71,7 @@ void main (void)
     __bis_SR_register(GIE);
 
     //Test
-    unsigned char i;
-    for(i=0;i<255;i++){
-    uarttransmitData = i;                      // Increment TX data
-    // Load data onto buffer
-    uarttransmitbyte(uarttransmitData);
-    }
+    uartselftest();
 
     // Infinite main loop
     while(1){
