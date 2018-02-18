@@ -161,11 +161,7 @@ void USCI_A0_ISR (void)
         //Vector 2 - RXIFG
         case 2:
             uartreceivedData = USCI_A_UART_receiveData(USCI_A0_BASE);
-            if(!(uartreceivedData == uarttransmitData))                   // Check value
-            {
-              while(1);
-            }
-            check =1;
+            __no_operation();
             break;
         default: break;
     }
