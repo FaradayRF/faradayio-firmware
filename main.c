@@ -67,6 +67,7 @@ void main (void)
     init_spi();
     init_uart();
     init_radio();
+    ReceiveOn();
 
 
     // Enable global interrupt
@@ -162,5 +163,43 @@ void USCI_A0_ISR (void)
             break;
         default: break;
     }
+}
+
+//******************************************************************************
+//
+//This is the CC1101 Radio interrupt vector service routine.
+//
+//******************************************************************************
+#pragma vector=CC1101_VECTOR
+__interrupt void CC1101_ISR(void)
+{
+  switch(__even_in_range(RF1AIV,32))        // Prioritizing Radio Core Interrupt
+  {
+    case  0: break;                         // No RF core interrupt pending
+    case  2: break;                         // RFIFG0
+    case  4: break;                         // RFIFG1
+    case  6: break;                         // RFIFG2
+    case  8: break;                         // RFIFG3
+    case 10: break;                         // RFIFG4
+    case 12: break;                         // RFIFG5
+    case 14: break;                         // RFIFG6
+    case 16: break;                         // RFIFG7
+    case 18: break;                         // RFIFG8
+    case 20:                                // RFIFG9
+      if(!(RF1AIES & BIT9))                 // RX sync word received
+      {
+        //receiving = 1;
+        //__bic_SR_register_on_exit(LPM3_bits); // Exit active
+          __no_operation();
+      }
+      else while(1);                // trap
+      break;
+    case 22: break;                         // RFIFG10
+    case 24: break;                         // RFIFG11
+    case 26: break;                         // RFIFG12
+    case 28: break;                         // RFIFG13
+    case 30: break;                         // RFIFG14
+    case 32: break;                         // RFIFG15
+  }
 }
 

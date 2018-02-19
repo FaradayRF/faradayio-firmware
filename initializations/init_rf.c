@@ -13,7 +13,6 @@
 #include "../HAL/RF1A.h"
 #include "../HAL/hal_PMM.h"
 #include "../HAL/hal_UCS.h"
-#include "../HAL/RfRegSettings.h"
 
 #define  PATABLE_VAL        (0x51)          // 0 dBm output
 
