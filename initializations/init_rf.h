@@ -11,11 +11,6 @@
 #ifndef INITIALIZATIONS_INIT_RF_H_
 #define INITIALIZATIONS_INIT_RF_H_
 
-#include "cc430x613x.h"
-#include "../HAL/RF1A.h"
-#include "../HAL/hal_PMM.h"
-#include "../HAL/hal_UCS.h"
-
 unsigned char init_radio(void);
 
 #endif /* INITIALIZATIONS_INIT_RF_H_ */
