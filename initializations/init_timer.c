@@ -7,6 +7,7 @@
 
 #include "cc430x613x.h"
 #include "init_timer.h"
+#include "../HAL/hal_UCS.h"
 
 void InitTimer(void)
 {

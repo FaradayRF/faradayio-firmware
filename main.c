@@ -45,6 +45,7 @@
 #include "initializations/init_gpio.h" // @TODO Make this a project global initialization directory for the linker.
 #include "initializations/init_uart.h" // @TODO Make this a project global initialization directory for the linker.
 #include "initializations/init_rf.h" // @TODO Make this a project global initialization directory for the linker.
+#include "initializations/init_timer.h" // @TODO Make this a project global initialization directory for the linker.
 #include "uart.h"
 #include "radio.h"
 
@@ -68,6 +69,7 @@ void main (void)
     init_spi();
     init_uart();
     init_radio();
+    InitTimer();
     ReceiveOn();
 
 
