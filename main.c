@@ -46,6 +46,7 @@
 #include "initializations/init_uart.h" // @TODO Make this a project global initialization directory for the linker.
 #include "initializations/init_rf.h" // @TODO Make this a project global initialization directory for the linker.
 #include "uart.h"
+#include "radio.h"
 
 /**
  * This function is the main function of the program. It contains an infinite
@@ -203,3 +204,45 @@ __interrupt void CC1101_ISR(void)
   }
 }
 
+
+//******************************************************************************
+//
+//This is the Timer0_A1 interrupt vector service routine.
+//
+//******************************************************************************
+#pragma vector=TIMER0_A1_VECTOR
+__interrupt void TIMER0_A1_ISR(void)
+{
+  switch(__even_in_range(TA0IV,14))
+  {
+    case 0:  break;
+    case 2:
+        /*
+      if(receiving)
+      {
+        TA0CCR1 += RX_TIMER_PERIOD;                  // 16 cycles * 1/32768 = ~500 us
+
+        pktRxHandler();
+
+        if(packetReceived)
+          __bic_SR_register_on_exit(LPM3_bits);
+      }
+      else if(transmitting)
+      {
+        TA0CCR1 += TX_TIMER_PERIOD;                  // 16 cycles * 1/32768 = ~500 us
+
+        pktTxHandler();
+
+        if(packetTransmit)
+          __bic_SR_register_on_exit(LPM3_bits);
+      }
+      */
+      break;
+    case 4:  break;                         // CCR2 not used
+    case 6:  break;                         // Reserved not used
+    case 8:  break;                         // Reserved not used
+    case 10: break;                         // Reserved not used
+    case 12: break;                         // Reserved not used
+    case 14: break;                         // Overflow not used
+  }
+}
