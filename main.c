@@ -85,7 +85,7 @@ void main (void)
     while(1){
 
         TransmitData(txdata);
-        __delay_cycles(50000000);
+        __delay_cycles(12000000);
 
 
         __no_operation();

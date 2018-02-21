@@ -14,7 +14,8 @@
 #include "../HAL/hal_PMM.h"
 #include "../HAL/hal_UCS.h"
 
-#define  PATABLE_VAL        (0x51)          // 0 dBm output
+//#define  PATABLE_VAL        (0x51)          // 0 dBm output
+#define  PATABLE_VAL        (145)          //
 
 // Chipcon
 // Product = CC430Fx13x

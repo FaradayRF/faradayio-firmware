@@ -8,6 +8,7 @@
 #include "radio.h"
 #include "cc430x613x.h"
 #include "HAL/RF1A.h"
+#include "cc1190.h"
 
 unsigned char packetReceived;
 unsigned char packetTransmit;
@@ -45,6 +46,14 @@ unsigned char TxBuffer[PACKET_LEN]= {
 
 void ReceiveOn(void)
 {
+
+  //Setup CC1190
+  RfHighGainModeEnable();
+  RfPowerAmplifierDisable();
+  RfLowNoiseAmplifierEnable();
+
+
+  //Receive Routine
   RF1AIES &= ~BIT9;
   RF1AIFG = 0;                              // Clear pending RFIFG interrupts
   RF1AIE  |= BIT9;                          // Enable the sync word received interrupt
@@ -93,6 +102,13 @@ void ReceivePacket(void)
 
 void TransmitPacket(void)
 {
+
+  //Setup CC1190
+  RfLowNoiseAmplifierDisable();
+  RfHighGainModeEnable();
+  RfPowerAmplifierEnable();
+
+  //Tranmit routine
   txBytesLeft = PACKET_LEN;
   txPosition = 0;
   packetTransmit = 0;
