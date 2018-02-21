@@ -23,6 +23,7 @@ unsigned char TxBufferLength = 0;
 unsigned char * _p_Buffer = 0;
 unsigned char buttonPressed = 0;
 unsigned int i = 0;
+volatile unsigned char fifofillcount = 0;
 
 unsigned char transmitting = 0;
 unsigned char receiving = 0;
@@ -193,6 +194,7 @@ void pktTxHandler(void) {
             if (freeSpaceInFifo = MIN(txBytesLeft, TxStatus & CC430_FIFO_BYTES_AVAILABLE_MASK))
             {
               txBytesLeft -= freeSpaceInFifo;
+              fifofillcount+=1;
 
               while(freeSpaceInFifo--)
               {
@@ -235,4 +237,26 @@ unsigned char TransmitData(unsigned char *data){
     ReceiveOff();
     receiving = 0;
     TransmitPacket();
+}
+
+unsigned char radioisr(void){
+    if(receiving)
+    {
+      TA0CCR1 += RX_TIMER_PERIOD;                  // 16 cycles * 1/32768 = ~500 us
+
+      pktRxHandler();
+
+      if(packetReceived)
+          __no_operation();
+        //__bic_SR_register_on_exit(LPM3_bits);
+    }
+    else if(transmitting)
+    {
+      TA0CCR1 += TX_TIMER_PERIOD;                  // 16 cycles * 1/32768 = ~500 us
+
+      pktTxHandler();
+
+      if(packetTransmit)
+          __no_operation();
+    }
 }

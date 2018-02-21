@@ -221,26 +221,7 @@ __interrupt void TIMER0_A1_ISR(void)
   {
     case 0:  break;
     case 2:
-        /*
-      if(receiving)
-      {
-        TA0CCR1 += RX_TIMER_PERIOD;                  // 16 cycles * 1/32768 = ~500 us
-
-        pktRxHandler();
-
-        if(packetReceived)
-          __bic_SR_register_on_exit(LPM3_bits);
-      }
-      else if(transmitting)
-      {
-        TA0CCR1 += TX_TIMER_PERIOD;                  // 16 cycles * 1/32768 = ~500 us
-
-        pktTxHandler();
-
-        if(packetTransmit)
-          __bic_SR_register_on_exit(LPM3_bits);
-      }
-      */
+        radioisr();
       break;
     case 4:  break;                         // CCR2 not used
     case 6:  break;                         // Reserved not used
