@@ -92,8 +92,6 @@ void ReceivePacket(void)
 
 void TransmitPacket(void)
 {
-  P3OUT |= BIT6;                        // Pulse LED during Transmit
-
   txBytesLeft = PACKET_LEN;
   txPosition = 0;
   packetTransmit = 0;
@@ -105,14 +103,12 @@ void TransmitPacket(void)
   TA0CCTL1 |= CCIE;
   TA0CTL |= MC_2 + TACLR;                   // Start the timer- continuous mode
 
-  __bis_SR_register(LPM3_bits + GIE);
   __no_operation();
 
-  TA0CCR1 = TX_TIMER_PERIOD;             // x cycles * 1/32768 = y us
-  TA0CCTL1 &= ~(CCIE);
-  TA0CTL &= ~(MC_3);                  // Turn off timer
+  //TA0CCR1 = TX_TIMER_PERIOD;             // x cycles * 1/32768 = y us
+  //TA0CCTL1 &= ~(CCIE);
+  //TA0CTL &= ~(MC_3);                  // Turn off timer
 
-  P3OUT &= ~BIT6;                     // Turn off LED after Transmit
 }
 
 //------------------------------------------------------------------------------
@@ -234,3 +230,9 @@ void pktTxHandler(void) {
         break;
     }
 } // pktTxHandler
+
+unsigned char TransmitData(unsigned char *data){
+    ReceiveOff();
+    receiving = 0;
+    TransmitPacket();
+}

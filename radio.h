@@ -32,5 +32,6 @@ void ReceivePacket(void);
 void TransmitPacket(void);
 void pktRxHandler(void);
 void pktTxHandler(void);
+unsigned char TransmitData(unsigned char *data);
 
 #endif /* RADIO_H_ */

@@ -77,7 +77,9 @@ void main (void)
     __bis_SR_register(GIE);
 
     //Test
-    uartselftest();
+    //uartselftest();
+    unsigned char txdata[5] = {0, 1, 2, 3, 4};
+    TransmitData(txdata);
 
     // Infinite main loop
     while(1){
