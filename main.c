@@ -79,10 +79,13 @@ void main (void)
     //Test
     //uartselftest();
     unsigned char txdata[5] = {0, 1, 2, 3, 4};
-    TransmitData(txdata);
+
 
     // Infinite main loop
     while(1){
+
+        TransmitData(txdata);
+        __delay_cycles(50000000);
 
 
         __no_operation();
