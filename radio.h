@@ -33,6 +33,6 @@ void TransmitPacket(void);
 void pktRxHandler(void);
 void pktTxHandler(void);
 unsigned char TransmitData(unsigned char *data);
-unsigned char radioisr(void);
+unsigned char radiotimerisr(void);
 
 #endif /* RADIO_H_ */

@@ -255,7 +255,7 @@ unsigned char TransmitData(unsigned char *data){
     TransmitPacket();
 }
 
-unsigned char radioisr(void){
+unsigned char radiotimerisr(void){
     if(receiving)
     {
       TA0CCR1 += RX_TIMER_PERIOD;                  // 16 cycles * 1/32768 = ~500 us

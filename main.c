@@ -84,8 +84,8 @@ void main (void)
     // Infinite main loop
     while(1){
 
-        TransmitData(txdata);
-        __delay_cycles(12000000);
+        //TransmitData(txdata);
+        //__delay_cycles(12000000);
 
 
         __no_operation();
@@ -196,7 +196,7 @@ __interrupt void CC1101_ISR(void)
     case 20:                                // RFIFG9
       if(!(RF1AIES & BIT9))                 // RX sync word received
       {
-        //receiving = 1;
+        receiving = 1;
         //__bic_SR_register_on_exit(LPM3_bits); // Exit active
           __no_operation();
       }
@@ -224,7 +224,7 @@ __interrupt void TIMER0_A1_ISR(void)
   {
     case 0:  break;
     case 2:
-        radioisr();
+        radiotimerisr();
       break;
     case 4:  break;                         // CCR2 not used
     case 6:  break;                         // Reserved not used
