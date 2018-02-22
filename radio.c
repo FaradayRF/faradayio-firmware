@@ -84,18 +84,17 @@ void ReceivePacket(void)
   rxPosition = 0;
   packetReceived = 0;
 
-  __delay_cycles(2800);                     // Wait for bytes to fill in RX FIFO
+  __delay_cycles(33600+5600);                     // Wait for bytes to fill in RX FIFO
 
   TA0CCR1   = RX_TIMER_PERIOD;              // x cycles * 1/32768 = y us
   TA0CCTL1 |= CCIE;
   TA0CTL   |= MC_2 + TACLR;                 // Start the timer- continuous mode
 
-  __bis_SR_register(LPM3_bits + GIE);
   __no_operation();
 
-  TA0CCR1 = RX_TIMER_PERIOD;
-  TA0CCTL1 &= ~(CCIE);
-  TA0CTL &= ~(MC_3);                  // Turn off timer
+  //TA0CCR1 = RX_TIMER_PERIOD;
+  //TA0CCTL1 &= ~(CCIE);
+  //TA0CTL &= ~(MC_3);                  // Turn off timer
 
   __no_operation();
 }
@@ -150,6 +149,15 @@ void pktRxHandler(void) {
 
   switch(RxStatus & CC430_STATE_MASK)
   {
+    case CC430_STATE_RX_OVERFLOW:
+        __no_operation();
+        //Flush RX FIFO
+        Strobe(RF_SIDLE);
+        Strobe(RF_SFRX);
+        break;
+    case CC430_STATE_TX_UNDERFLOW:
+        __no_operation();
+        break;
     case CC430_STATE_RX:
       // If there's anything in the RX FIFO....
       if (bytesInFifo = MIN(rxBytesLeft, RxStatus & CC430_FIFO_BYTES_AVAILABLE_MASK))
@@ -162,6 +170,7 @@ void pktRxHandler(void) {
           RxBuffer[rxPosition] = ReadSingleReg(RXFIFO);
           rxPosition++;
         }
+        __no_operation();
         if (!rxBytesLeft){
             packetReceived = 1;
             receiving = 0;
@@ -275,4 +284,27 @@ unsigned char radiotimerisr(void){
       if(packetTransmit)
           __no_operation();
     }
+}
+
+unsigned char radioisr(void){
+    if(!(RF1AIES & BIT9))                 // RX sync word received
+        {
+        receiving = 1;
+        //__bic_SR_register_on_exit(LPM3_bits); // Exit active
+          __no_operation();
+        }
+        else while(1);                // trap
+
+}
+
+unsigned char radiomainloop(void){
+    if(receiving)
+        {
+          ReceivePacket();
+          __no_operation();
+        }
+        if(!transmitting && !receiving)
+        {
+          ReceiveOn();
+        }
 }

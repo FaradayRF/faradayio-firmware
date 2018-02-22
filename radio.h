@@ -34,5 +34,7 @@ void pktRxHandler(void);
 void pktTxHandler(void);
 unsigned char TransmitData(unsigned char *data);
 unsigned char radiotimerisr(void);
+unsigned char radioisr(void);
+unsigned char radiomainloop(void);
 
 #endif /* RADIO_H_ */

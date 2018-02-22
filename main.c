@@ -87,6 +87,8 @@ void main (void)
         //TransmitData(txdata);
         //__delay_cycles(12000000);
 
+        radiomainloop();
+
 
         __no_operation();
     } // END Infinite main loop
@@ -194,13 +196,7 @@ __interrupt void CC1101_ISR(void)
     case 16: break;                         // RFIFG7
     case 18: break;                         // RFIFG8
     case 20:                                // RFIFG9
-      if(!(RF1AIES & BIT9))                 // RX sync word received
-      {
-        receiving = 1;
-        //__bic_SR_register_on_exit(LPM3_bits); // Exit active
-          __no_operation();
-      }
-      else while(1);                // trap
+        radioisr();
       break;
     case 22: break;                         // RFIFG10
     case 24: break;                         // RFIFG11

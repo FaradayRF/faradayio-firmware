@@ -10,7 +10,7 @@
 
 #include "driverlib.h"
 #include "init_gpio.h"
-#include "init_cc1190.h"
+#include "../cc1190.h"
 
 unsigned char init_gpio_spi(void){
     /**
