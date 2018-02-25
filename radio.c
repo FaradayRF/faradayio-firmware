@@ -44,6 +44,7 @@ unsigned char TxBuffer[PACKET_LEN]= {
     0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99,
 };
 
+volatile unsigned char test2;
 
 void ReceiveOn(void)
 {
@@ -86,7 +87,7 @@ void ReceivePacket(void)
   rxPosition = 0;
   packetReceived = 0;
 
-  //__delay_cycles(33600+5600);                     // Wait for bytes to fill in RX FIFO
+  __delay_cycles(33600);                     // Wait for bytes to fill in RX FIFO (MCLK = 12MHz, 2.8ms)
 
   TA0CCR1   = RX_TIMER_PERIOD;              // x cycles * 1/32768 = y us
   TA0CCTL1 |= CCIE;
@@ -172,6 +173,15 @@ void pktRxHandler(void) {
 
         // Read from RX FIFO and store the data in rxBuffer
         while (bytesInFifo--) {
+            if(rxPosition==10){
+                __no_operation();
+            }
+            if(rxPosition==12){
+                __no_operation();
+            }
+            if(rxPosition==13){
+                __no_operation();
+            }
           RxBuffer[rxPosition] = ReadSingleReg(RXFIFO);
           rxPosition++;
         }
@@ -201,7 +211,7 @@ void pktRxHandler(void) {
 
       rxBytesLeft = 0;
       receiving = 0;
-      ReceiveOff();
+      //ReceiveOff();
 
       break;
   }
