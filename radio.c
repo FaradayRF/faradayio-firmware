@@ -15,11 +15,12 @@ unsigned char packetTransmit;
 
 unsigned char txBytesLeft = PACKET_LEN;           // +1 for length byte
 unsigned char txPosition = 0;
-unsigned char rxBytesLeft = PACKET_LEN+2;         // +2 for status bytes
-unsigned char rxPosition = 0;
-unsigned char lengthByteRead = 0;
+volatile unsigned char rxBytesLeft = PACKET_LEN+2;         // +2 for status bytes
+volatile unsigned char rxPosition = 0;
+volatile unsigned char lengthByteRead = 0;
+unsigned char rxPacketStarted = 0;
 
-unsigned char RxBufferLength = 0;
+volatile unsigned char RxBufferLength = 0;
 unsigned char TxBufferLength = 0;
 unsigned char * _p_Buffer = 0;
 unsigned char buttonPressed = 0;
@@ -80,11 +81,12 @@ void ReceiveOff(void)
 
 void ReceivePacket(void)
 {
+  //This should only be reinitialized when needed at the start of a NEW packet!
   rxBytesLeft = PACKET_LEN + 2;// Set maximum packet leng + 2 for appended bytes
   rxPosition = 0;
   packetReceived = 0;
 
-  __delay_cycles(33600+5600);                     // Wait for bytes to fill in RX FIFO
+  //__delay_cycles(33600+5600);                     // Wait for bytes to fill in RX FIFO
 
   TA0CCR1   = RX_TIMER_PERIOD;              // x cycles * 1/32768 = y us
   TA0CCTL1 |= CCIE;
@@ -154,6 +156,9 @@ void pktRxHandler(void) {
         //Flush RX FIFO
         Strobe(RF_SIDLE);
         Strobe(RF_SFRX);
+
+        rxPacketStarted = 0;
+
         break;
     case CC430_STATE_TX_UNDERFLOW:
         __no_operation();
@@ -170,14 +175,19 @@ void pktRxHandler(void) {
           RxBuffer[rxPosition] = ReadSingleReg(RXFIFO);
           rxPosition++;
         }
+        if(rxBytesLeft<87){
+            __no_operation();
+        }
         __no_operation();
+
         if (!rxBytesLeft){
             packetReceived = 1;
             receiving = 0;
             lengthByteRead = 0;
+            rxPosition = 0;
+            rxPacketStarted = 0;
             ReceiveOff();
 
-            P1OUT ^= BIT0;                    // Toggle LED1
         }
       }
       break;
@@ -186,6 +196,8 @@ void pktRxHandler(void) {
       {
         packetReceived = 1;
       }
+
+      rxPacketStarted = 0;
 
       rxBytesLeft = 0;
       receiving = 0;
@@ -300,8 +312,16 @@ unsigned char radioisr(void){
 unsigned char radiomainloop(void){
     if(receiving)
         {
-          ReceivePacket();
-          __no_operation();
+        if(rxPacketStarted){
+            __no_operation(); // Nothing to do, let ISR's in timer rx packet
+        }
+        if(!rxPacketStarted){
+            // Setup new packet
+            ReceivePacket();
+            rxPacketStarted = 1;
+        }
+
+        __no_operation();
         }
         if(!transmitting && !receiving)
         {
