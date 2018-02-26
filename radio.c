@@ -15,17 +15,17 @@ unsigned char packetTransmit;
 
 unsigned char txBytesLeft = PACKET_LEN;           // +1 for length byte
 unsigned char txPosition = 0;
-volatile unsigned char rxBytesLeft = PACKET_LEN+2;         // +2 for status bytes
-volatile unsigned char rxPosition = 0;
-volatile unsigned char lengthByteRead = 0;
+unsigned char rxBytesLeft = PACKET_LEN+2;         // +2 for status bytes
+unsigned char rxPosition = 0;
+unsigned char lengthByteRead = 0;
 unsigned char rxPacketStarted = 0;
 
-volatile unsigned char RxBufferLength = 0;
+unsigned char RxBufferLength = 0;
 unsigned char TxBufferLength = 0;
 unsigned char * _p_Buffer = 0;
 unsigned char buttonPressed = 0;
 unsigned int i = 0;
-volatile unsigned char fifofillcount = 0;
+unsigned char fifofillcount = 0;
 
 unsigned char transmitting = 0;
 unsigned char receiving = 0;
@@ -92,14 +92,6 @@ void ReceivePacket(void)
   TA0CCR1   = RX_TIMER_PERIOD;              // x cycles * 1/32768 = y us
   TA0CCTL1 |= CCIE;
   TA0CTL   |= MC_2 + TACLR;                 // Start the timer- continuous mode
-
-  __no_operation();
-
-  //TA0CCR1 = RX_TIMER_PERIOD;
-  //TA0CCTL1 &= ~(CCIE);
-  //TA0CTL &= ~(MC_3);                  // Turn off timer
-
-  __no_operation();
 }
 
 void TransmitPacket(void)
@@ -115,18 +107,10 @@ void TransmitPacket(void)
   txPosition = 0;
   packetTransmit = 0;
   transmitting = 1;
-
   Strobe( RF_STX );                         // Strobe STX
-
   TA0CCR1   = TX_TIMER_PERIOD;              // x cycles * 1/32768 = y us
   TA0CCTL1 |= CCIE;
   TA0CTL |= MC_2 + TACLR;                   // Start the timer- continuous mode
-
-  __no_operation();
-
-  //TA0CCR1 = TX_TIMER_PERIOD;             // x cycles * 1/32768 = y us
-  //TA0CCTL1 &= ~(CCIE);
-  //TA0CTL &= ~(MC_3);                  // Turn off timer
 
 }
 
@@ -153,13 +137,10 @@ void pktRxHandler(void) {
   switch(RxStatus & CC430_STATE_MASK)
   {
     case CC430_STATE_RX_OVERFLOW:
-        __no_operation();
         //Flush RX FIFO
         Strobe(RF_SIDLE);
         Strobe(RF_SFRX);
-
         rxPacketStarted = 0;
-
         break;
     case CC430_STATE_TX_UNDERFLOW:
         __no_operation();
@@ -173,22 +154,9 @@ void pktRxHandler(void) {
 
         // Read from RX FIFO and store the data in rxBuffer
         while (bytesInFifo--) {
-            if(rxPosition==10){
-                __no_operation();
-            }
-            if(rxPosition==12){
-                __no_operation();
-            }
-            if(rxPosition==13){
-                __no_operation();
-            }
           RxBuffer[rxPosition] = ReadSingleReg(RXFIFO);
           rxPosition++;
         }
-        if(rxBytesLeft<87){
-            __no_operation();
-        }
-        __no_operation();
 
         if (!rxBytesLeft){
             packetReceived = 1;
@@ -280,13 +248,13 @@ void pktTxHandler(void) {
     }
 } // pktTxHandler
 
-unsigned char TransmitData(unsigned char *data){
+void TransmitData(unsigned char *data){
     ReceiveOff();
     receiving = 0;
     TransmitPacket();
 }
 
-unsigned char radiotimerisr(void){
+void radiotimerisr(void){
     if(receiving)
     {
       TA0CCR1 += RX_TIMER_PERIOD;                  // 16 cycles * 1/32768 = ~500 us
@@ -308,7 +276,7 @@ unsigned char radiotimerisr(void){
     }
 }
 
-unsigned char radioisr(void){
+void radioisr(void){
     if(!(RF1AIES & BIT9))                 // RX sync word received
         {
         receiving = 1;
@@ -319,7 +287,7 @@ unsigned char radioisr(void){
 
 }
 
-unsigned char radiomainloop(void){
+void radiomainloop(void){
     if(receiving)
         {
         if(rxPacketStarted){
