@@ -1,8 +1,11 @@
-/*
- * radio.c
+/**
+ * @file radio.c
+ * @brief This file controls the radio hardware perhiperal in both transmitting
+ * and receiving modes.
  *
- *  Created on: Feb 18, 2018
- *      Author: KB1LQ
+ * @author Brenton Salmi, KB1LQD
+ *
+ * @date 2/25/2018
  */
 
 #include "radio.h"
@@ -176,11 +179,8 @@ void pktRxHandler(void) {
       }
 
       rxPacketStarted = 0;
-
       rxBytesLeft = 0;
       receiving = 0;
-      //ReceiveOff();
-
       break;
   }
 } // pktRxHandler
@@ -265,6 +265,7 @@ void radiotimerisr(void){
           __no_operation();
         //__bic_SR_register_on_exit(LPM3_bits);
     }
+
     else if(transmitting)
     {
       TA0CCR1 += TX_TIMER_PERIOD;                  // 16 cycles * 1/32768 = ~500 us
@@ -280,7 +281,6 @@ void radioisr(void){
     if(!(RF1AIES & BIT9))                 // RX sync word received
         {
         receiving = 1;
-        //__bic_SR_register_on_exit(LPM3_bits); // Exit active
           __no_operation();
         }
         else while(1);                // trap
@@ -293,14 +293,14 @@ void radiomainloop(void){
         if(rxPacketStarted){
             __no_operation(); // Nothing to do, let ISR's in timer rx packet
         }
+
         if(!rxPacketStarted){
             // Setup new packet
             ReceivePacket();
             rxPacketStarted = 1;
         }
-
-        __no_operation();
         }
+
         if(!transmitting && !receiving)
         {
           ReceiveOn();

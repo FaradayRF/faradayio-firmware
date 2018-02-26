@@ -1,8 +1,11 @@
-/*
- * radio.h
+/**
+ * @file radio.h
+ * @brief This file controls the radio hardware perhiperal in both transmitting
+ * and receiving modes.
  *
- *  Created on: Feb 18, 2018
- *      Author: KB1LQ
+ * @author Brenton Salmi, KB1LQD
+ *
+ * @date 2/25/2018
  */
 
 #ifndef RADIO_H_
@@ -83,15 +86,91 @@
  */
 #define MIN(n,m) (((n) < (m)) ? (n) : (m))
 
+/**
+ * This function enables the CC430 radio module into active receive mode.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 2/25/2018
+ */
 void ReceiveOn(void);
+
+/**
+ * This function removes the CC430 radio module from active receive mode.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 2/25/2018
+ */
 void ReceiveOff(void);
+
+/**
+ * This function is called to start receiving a new packet. This should only
+ * be executed at the start of brand new packet!
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 2/25/2018
+ */
 void ReceivePacket(void);
+
+/**
+ * This function configures the CC430 radio module into transmit mode and
+ * also holds the sequence that transmits a packet.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 2/25/2018
+ */
 void TransmitPacket(void);
+
+/**
+ * This is the function used to actively query for new portions of a packet
+ * being received. This is called after the ReceivePacket() function and
+ * is mainly controlled by the timer.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 2/25/2018
+ */
 void pktRxHandler(void);
+
+/**
+ * This is the function used to actively sequence through the transmission of a
+ * packet. It is mainly controlled by the timer ISR.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 2/25/2018
+ */
 void pktTxHandler(void);
+
+/**
+ * This is the high-level function that transmits a fixed array of data bytes.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 2/25/2018
+ */
 void TransmitData(unsigned char *data);
+
+/**
+ * Function that contains the logic sequences for transmit and receive operation
+ * as needed by the associated timer interrupt.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 2/25/2018
+ */
 void radiotimerisr(void);
+
+/**
+ * * Function that contains the logic sequences for transmit and receive operation
+ * and is called when the associated radio perhipheral interrupt occurs.
+ * @author Brenton Salmi, KB1LQD
+ * @date 2/25/2018
+ */
 void radioisr(void);
+
+/**
+ * The logic to perform during each iteration of the main infinite main loop for
+ * both transmit and receive.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 2/25/2018
+ */
 void radiomainloop(void);
 
 #endif /* RADIO_H_ */

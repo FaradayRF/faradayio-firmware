@@ -1,8 +1,10 @@
-/*
- * init_timer.c
+/**
+ * @file init_timer.c
+ * @brief This file initializes and controls
  *
- *  Created on: Feb 18, 2018
- *      Author: KB1LQ
+ * @author Brenton Salmi, KB1LQD
+ *
+ * @date 2/25/2018
  */
 
 #include "cc430x613x.h"
