@@ -79,8 +79,15 @@ unsigned char get_fifo(fifo_state_machine *buffer_struct, volatile unsigned char
  */
 unsigned char fifo_empty(fifo_state_machine *buffer_struct);
 
+
+/**
+ *  This function is initializes the self-test FIFO variables and elements.
+ * */
 void init_self_test_fifo(void);
 
+/**
+ *  This function is runs a quick self test to test and example fifo operation.
+ * */
 void fifo_selftest(void);
 
 #endif /* RING_BUFFERS_FIFO_H_ */
