@@ -44,7 +44,10 @@
 #include "initializations/init_spi.h" // @TODO Make this a project global initialization directory for the linker.
 #include "initializations/init_gpio.h" // @TODO Make this a project global initialization directory for the linker.
 #include "initializations/init_uart.h" // @TODO Make this a project global initialization directory for the linker.
+#include "initializations/init_rf.h" // @TODO Make this a project global initialization directory for the linker.
+#include "initializations/init_timer.h" // @TODO Make this a project global initialization directory for the linker.
 #include "uart.h"
+#include "radio.h"
 
 /**
  * This function is the main function of the program. It contains an infinite
@@ -65,16 +68,26 @@ void main (void)
     init_gpio_spi();
     init_spi();
     init_uart();
+    init_radio();
+    InitTimer();
+    ReceiveOn();
 
 
     // Enable global interrupt
     __bis_SR_register(GIE);
 
     //Test
-    uartselftest();
+    //uartselftest();
+    unsigned char txdata[5] = {0, 1, 2, 3, 4};
+
 
     // Infinite main loop
     while(1){
+
+        //TransmitData(txdata);
+        //__delay_cycles(12000000);
+
+        radiomainloop();
 
 
         __no_operation();
@@ -162,3 +175,58 @@ void USCI_A0_ISR (void)
     }
 }
 
+//******************************************************************************
+//
+//This is the CC1101 Radio interrupt vector service routine.
+//
+//******************************************************************************
+#pragma vector=CC1101_VECTOR
+__interrupt void CC1101_ISR(void)
+{
+  switch(__even_in_range(RF1AIV,32))        // Prioritizing Radio Core Interrupt
+  {
+    case  0: break;                         // No RF core interrupt pending
+    case  2: break;                         // RFIFG0
+    case  4: break;                         // RFIFG1
+    case  6: break;                         // RFIFG2
+    case  8: break;                         // RFIFG3
+    case 10: break;                         // RFIFG4
+    case 12: break;                         // RFIFG5
+    case 14: break;                         // RFIFG6
+    case 16: break;                         // RFIFG7
+    case 18: break;                         // RFIFG8
+    case 20:                                // RFIFG9
+        radioisr();
+      break;
+    case 22: break;                         // RFIFG10
+    case 24: break;                         // RFIFG11
+    case 26: break;                         // RFIFG12
+    case 28: break;                         // RFIFG13
+    case 30: break;                         // RFIFG14
+    case 32: break;                         // RFIFG15
+  }
+}
+
+
+//******************************************************************************
+//
+//This is the Timer0_A1 interrupt vector service routine.
+//
+//******************************************************************************
+#pragma vector=TIMER0_A1_VECTOR
+__interrupt void TIMER0_A1_ISR(void)
+{
+  switch(__even_in_range(TA0IV,14))
+  {
+    case 0:  break;
+    case 2:
+        radiotimerisr();
+      break;
+    case 4:  break;                         // CCR2 not used
+    case 6:  break;                         // Reserved not used
+    case 8:  break;                         // Reserved not used
+    case 10: break;                         // Reserved not used
+    case 12: break;                         // Reserved not used
+    case 14: break;                         // Overflow not used
+  }
+}
