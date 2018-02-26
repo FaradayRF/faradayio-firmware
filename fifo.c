@@ -103,13 +103,14 @@ void fifo_selftest(void){
     unsigned char testfifodata[5] = {0x00, 0x01, 0x02, 0x03, 0x04};
     unsigned char i;
     unsigned char rxtestbyte;
+    unsigned char status;
     for(i=0; i<5; i++){
-        put_fifo(&selftest_state_machine, &selftest_fifo_buffer, &testfifodata[i]);
+        status = put_fifo(&selftest_state_machine, &selftest_fifo_buffer, &testfifodata[i]);
         __no_operation();
     }
 
     for(i=0; i<5; i++){
-            get_fifo(&selftest_state_machine, &selftest_fifo_buffer, &rxtestbyte);
+        status = get_fifo(&selftest_state_machine, &selftest_fifo_buffer, &rxtestbyte);
             __no_operation();
         }
 
