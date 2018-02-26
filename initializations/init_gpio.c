@@ -10,6 +10,7 @@
 
 #include "driverlib.h"
 #include "init_gpio.h"
+#include "../cc1190.h"
 
 unsigned char init_gpio_spi(void){
     /**
@@ -64,6 +65,13 @@ unsigned char init_gpio_spi(void){
     GPIO_setAsPeripheralModuleFunctionInputPin(
         GPIO_PORT_P1,
         GPIO_PIN5 + GPIO_PIN6
+        );
+
+
+    // CC1190 Support
+    GPIO_setAsOutputPin(
+        GPIO_PORT_P4,
+        PA_ENABLE + LNA_ENABLE + HGM_SELECT
         );
 
 
