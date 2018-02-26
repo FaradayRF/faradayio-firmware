@@ -80,6 +80,9 @@ void main (void)
     //uartselftest();
     unsigned char txdata[5] = {0, 1, 2, 3, 4};
 
+    init_self_test_fifo();
+    fifo_selftest();
+
 
     // Infinite main loop
     while(1){
