@@ -86,6 +86,11 @@
  */
 #define MIN(n,m) (((n) < (m)) ? (n) : (m))
 
+struct RfTxBuffer{
+    unsigned char len;
+    unsigned char * data;
+};
+
 
 /**
  * This function enables the CC430 radio module into active receive mode.
@@ -118,8 +123,10 @@ void ReceivePacket(void);
  *
  * @author Brenton Salmi, KB1LQD
  * @date 2/25/2018
+ *
+ * @param len Length of data to transmit
  */
-void TransmitPacket(void);
+void TransmitPacket(unsigned char len);
 
 /**
  * This is the function used to actively query for new portions of a packet
@@ -145,8 +152,11 @@ void pktTxHandler(void);
  *
  * @author Brenton Salmi, KB1LQD
  * @date 2/25/2018
+ *
+ * @param data Pointer to data to transmit
+ * @param len Length of data to transmit
  */
-void TransmitData(unsigned char *data);
+void TransmitData(unsigned char *data, unsigned char len);
 
 /**
  * Function that contains the logic sequences for transmit and receive operation

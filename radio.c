@@ -34,6 +34,7 @@ unsigned char transmitting = 0;
 unsigned char receiving = 0;
 
 unsigned char RxBuffer[PACKET_LEN+2] = {0};
+/*
 unsigned char TxBuffer[PACKET_LEN]= {
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
     0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19,
@@ -46,6 +47,11 @@ unsigned char TxBuffer[PACKET_LEN]= {
     0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89,
     0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99,
 };
+*/
+
+unsigned char * TxBuffer;
+
+
 
 volatile unsigned char test2;
 
@@ -97,7 +103,7 @@ void ReceivePacket(void)
   TA0CTL   |= MC_2 + TACLR;                 // Start the timer- continuous mode
 }
 
-void TransmitPacket(void)
+void TransmitPacket(unsigned char len)
 {
 
   //Setup CC1190
@@ -106,7 +112,7 @@ void TransmitPacket(void)
   RfPowerAmplifierEnable();
 
   //Tranmit routine
-  txBytesLeft = PACKET_LEN;
+  txBytesLeft = len;
   txPosition = 0;
   packetTransmit = 0;
   transmitting = 1;
@@ -213,6 +219,7 @@ void pktTxHandler(void) {
 
               while(freeSpaceInFifo--)
               {
+
                 WriteSingleReg(TXFIFO, TxBuffer[txPosition]);
                 txPosition++;
               }
@@ -248,10 +255,12 @@ void pktTxHandler(void) {
     }
 } // pktTxHandler
 
-void TransmitData(unsigned char *data){
+void TransmitData(unsigned char *data, unsigned char len){
     ReceiveOff();
     receiving = 0;
-    TransmitPacket();
+    changeRfPacketLength(len);
+    TxBuffer = data;
+    TransmitPacket(len);
 }
 
 void radiotimerisr(void){

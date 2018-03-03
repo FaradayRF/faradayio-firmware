@@ -87,12 +87,25 @@ void main (void)
     changeRfPacketLength(253);
     __no_operation();
 
+    unsigned char data[253];
+    unsigned char i;
+
+    for(i=0; i<253; i++){
+        data[i]= i;
+    }
+
+    struct RfTxBuffer RfTxBuffer1;
+
+    RfTxBuffer1.len = 253;
+    RfTxBuffer1.data = data;
+
+
 
     // Infinite main loop
     while(1){
 
-        //TransmitData(txdata);
-        //__delay_cycles(12000000);
+        TransmitData(RfTxBuffer1.data, 253);
+        __delay_cycles(12000000);
 
         radiomainloop();
 
