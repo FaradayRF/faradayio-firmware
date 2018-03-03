@@ -12,5 +12,6 @@
 #define INITIALIZATIONS_INIT_RF_H_
 
 unsigned char init_radio(void);
+void changeRfPacketLength(unsigned char length);
 
 #endif /* INITIALIZATIONS_INIT_RF_H_ */

@@ -86,6 +86,7 @@
  */
 #define MIN(n,m) (((n) < (m)) ? (n) : (m))
 
+
 /**
  * This function enables the CC430 radio module into active receive mode.
  *

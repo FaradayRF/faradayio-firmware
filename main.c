@@ -78,10 +78,14 @@ void main (void)
 
     //Test
     //uartselftest();
-    unsigned char txdata[5] = {0, 1, 2, 3, 4};
+    //unsigned char txdata[5] = {0, 1, 2, 3, 4};
 
-    init_self_test_fifo();
-    fifo_selftest();
+    //init_self_test_fifo();
+    //fifo_selftest();
+
+    changeRfPacketLength(50);
+    changeRfPacketLength(253);
+    __no_operation();
 
 
     // Infinite main loop

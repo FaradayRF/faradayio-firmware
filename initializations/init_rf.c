@@ -104,3 +104,11 @@ unsigned char init_radio(void){
     return 0;
 }
 
+void changeRfPacketLength(unsigned char length){
+    //Update Rf core settings packet length value
+    rfSettings.pktlen = length;
+
+    //Write RF core settings
+    WriteRfSettings(&rfSettings);
+}
+
