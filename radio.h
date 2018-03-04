@@ -184,4 +184,8 @@ void radioisr(void);
  */
 void radiomainloop(void);
 
+void CreateTestRadioData(void);
+
+void TransmitTestRadioData(void);
+
 #endif /* RADIO_H_ */

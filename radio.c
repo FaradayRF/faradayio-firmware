@@ -51,7 +51,8 @@ unsigned char TxBuffer[PACKET_LEN]= {
 
 unsigned char * TxBuffer;
 
-
+unsigned char data[253];
+struct RfTxBuffer RfTxBuffer1;
 
 volatile unsigned char test2;
 
@@ -314,4 +315,19 @@ void radiomainloop(void){
         {
           ReceiveOn();
         }
+}
+
+void CreateTestRadioData(void){
+    unsigned char i;
+
+    for(i=0; i<253; i++){
+        data[i]= i;
+    }
+
+    RfTxBuffer1.len = 253;
+    RfTxBuffer1.data = data;
+}
+
+void TransmitTestRadioData(void){
+    TransmitData((unsigned char *)RfTxBuffer1.data, 253);
 }
