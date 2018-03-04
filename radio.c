@@ -12,6 +12,8 @@
 #include "cc430x613x.h"
 #include "HAL/RF1A.h"
 #include "cc1190.h"
+#include "initializations/init_rf.h"
+#include "initializations/init_timer.h"
 
 unsigned char packetReceived;
 unsigned char packetTransmit;
@@ -56,6 +58,9 @@ struct RfTxBuffer RfTxBuffer1;
 
 volatile unsigned char test2;
 
+unsigned char txtestdataflag;
+unsigned int txtestdatatimercnt;
+
 void ReceiveOn(void)
 {
 
@@ -99,9 +104,7 @@ void ReceivePacket(void)
 
   __delay_cycles(33600);                     // Wait for bytes to fill in RX FIFO (MCLK = 12MHz, 2.8ms)
 
-  TA0CCR1   = RX_TIMER_PERIOD;              // x cycles * 1/32768 = y us
-  TA0CCTL1 |= CCIE;
-  TA0CTL   |= MC_2 + TACLR;                 // Start the timer- continuous mode
+  StartRadioRxTimer();
 }
 
 void TransmitPacket(unsigned char len)
@@ -118,9 +121,7 @@ void TransmitPacket(unsigned char len)
   packetTransmit = 0;
   transmitting = 1;
   Strobe( RF_STX );                         // Strobe STX
-  TA0CCR1   = TX_TIMER_PERIOD;              // x cycles * 1/32768 = y us
-  TA0CCTL1 |= CCIE;
-  TA0CTL |= MC_2 + TACLR;                   // Start the timer- continuous mode
+  StartRadioTxTimer();
 
 }
 
@@ -175,6 +176,7 @@ void pktRxHandler(void) {
             rxPosition = 0;
             rxPacketStarted = 0;
             ReceiveOff();
+            StopRadioRxTimer();
 
         }
       }
@@ -234,6 +236,7 @@ void pktTxHandler(void) {
                 RF1AIFG &= ~BIT9;     // clear RFIFG9
                 transmitting = 0;
                 packetTransmit = 1;
+                StopRadioTxTimer();
               }
             }
             break;
@@ -329,5 +332,25 @@ void CreateTestRadioData(void){
 }
 
 void TransmitTestRadioData(void){
+    if(!transmitting){
     TransmitData((unsigned char *)RfTxBuffer1.data, 253);
+    }
+}
+
+void radiotestdatamainloop(){
+    if(txtestdataflag){
+        TransmitTestRadioData();
+        txtestdataflag = 0;
+    }
+}
+
+
+void RadioTestTimerIsr(void){
+    if(txtestdatatimercnt<3){
+        txtestdatatimercnt++;
+    }
+    else{
+        txtestdataflag = 1;
+        txtestdatatimercnt = 0;
+    }
 }

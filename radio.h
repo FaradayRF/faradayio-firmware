@@ -188,4 +188,8 @@ void CreateTestRadioData(void);
 
 void TransmitTestRadioData(void);
 
+void radiotestdatamainloop(void);
+
+void RadioTestTimerIsr(void);
+
 #endif /* RADIO_H_ */

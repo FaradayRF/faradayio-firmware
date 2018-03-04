@@ -70,6 +70,8 @@ void main (void)
     init_uart();
     init_radio();
     InitTimer();
+    StartTestTimer();
+    StartRadioMainTimer();
     ReceiveOn();
 
 
@@ -89,8 +91,11 @@ void main (void)
 
     CreateTestRadioData();
 
-    TransmitTestRadioData();
-
+    /*unsigned char i;
+    for(i=0; i<100; i++){
+        TransmitTestRadioData();
+    }
+    */
 
 
     // Infinite main loop
@@ -98,8 +103,10 @@ void main (void)
 
 
         //__delay_cycles(12000000);
-
+        //TransmitTestRadioData();
         radiomainloop();
+
+        radiotestdatamainloop();
 
 
         __no_operation();
@@ -234,8 +241,13 @@ __interrupt void TIMER0_A1_ISR(void)
     case 2:
         radiotimerisr();
       break;
-    case 4:  break;                         // CCR2 not used
-    case 6:  break;                         // Reserved not used
+    case 4:
+        __no_operation();
+        RadioTestTimerIsr();
+        break;                         // CCR2 not used
+    case 6:
+        __no_operation();
+        break;                         // Reserved not used
     case 8:  break;                         // Reserved not used
     case 10: break;                         // Reserved not used
     case 12: break;                         // Reserved not used

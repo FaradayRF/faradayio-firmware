@@ -18,6 +18,10 @@
  */
 #define  TX_TIMER_PERIOD    (40)
 
+#define  TESTTIMERPERIOD     (32767)
+
+#define  RADIOMAINTIMERPERIOD     (400)
+
 /**
  * This Initializes the timer perhiperal as needed by the radio transmit and receive operations.
  *
@@ -25,6 +29,14 @@
  * @date 2/25/2018
  */
 void InitTimer(void);
+void StartRadioRxTimer(void);
+void StopRadioRxTimer(void);
+void StartRadioTxTimer(void);
+void StopRadioTxTimer(void);
+void StartTestTimer(void);
+void StopTestTimer(void);
+void StartRadioMainTimer(void);
+void StopRadioMainTimer(void);
 
 
 #endif /* INITIALIZATIONS_INIT_TIMER_H_ */
