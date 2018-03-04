@@ -161,6 +161,7 @@ void pktRxHandler(void) {
         Strobe(RF_SIDLE);
         Strobe(RF_SFRX);
         rxPacketStarted = 0;
+        ReceiveOff();
         break;
     case CC430_STATE_TX_UNDERFLOW:
         __no_operation();
@@ -247,7 +248,7 @@ void pktTxHandler(void) {
               {
 
                 WriteSingleReg(TXFIFO, TxBuffer[txPosition]);
-                //DebugBuffer[txPosition] = TxBuffer[txPosition];
+                DebugBuffer[txPosition] = TxBuffer[txPosition];
                 txPosition++;
               }
 
