@@ -70,7 +70,7 @@ void main (void)
     init_uart();
     init_radio();
     InitTimer();
-    StartTestTimer();
+    //StartTestTimer();
     StartRadioMainTimer();
     ReceiveOn();
 
@@ -90,6 +90,7 @@ void main (void)
     __no_operation();
 
     CreateTestRadioData();
+    TransmitTestRadioData();
 
     /*unsigned char i;
     for(i=0; i<100; i++){

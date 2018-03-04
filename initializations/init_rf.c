@@ -101,6 +101,13 @@ unsigned char init_radio(void){
     //Write PA table settings
     WriteSinglePATable(PATABLE_VAL);
 
+    radio_manual_idle();
+    radio_manual_calibration_idle();
+    radio_manual_idle();
+
+    volatile unsigned char pllcaltest;
+    pllcaltest = ReadSingleReg(FSCAL1);
+
     return 0;
 }
 
@@ -112,3 +119,16 @@ void changeRfPacketLength(unsigned char length){
     WriteRfSettings(&rfSettings);
 }
 
+
+void radio_manual_calibration_idle(void){
+    //Calibration Initial
+    Strobe( RF_SIDLE );
+    //__delay_cycles(1000000); //This can be optimized shorte
+    Strobe( RF_SCAL );
+    __delay_cycles(1000000); //This can be optimized shorter
+}
+
+void radio_manual_idle(void){
+    //Calibration Initial
+    Strobe( RF_SIDLE );
+}

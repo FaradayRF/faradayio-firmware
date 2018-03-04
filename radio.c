@@ -36,6 +36,7 @@ unsigned char transmitting = 0;
 unsigned char receiving = 0;
 
 unsigned char RxBuffer[PACKET_LEN+2] = {0};
+unsigned char DebugBuffer[PACKET_LEN+2] = {0};
 /*
 unsigned char TxBuffer[PACKET_LEN]= {
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
@@ -60,6 +61,9 @@ volatile unsigned char test2;
 
 unsigned char txtestdataflag;
 unsigned int txtestdatatimercnt;
+unsigned char incomingpacketflag;
+
+unsigned char rxintervalcnt;
 
 void ReceiveOn(void)
 {
@@ -76,9 +80,10 @@ void ReceiveOn(void)
   RF1AIE  |= BIT9;                          // Enable the sync word received interrupt
 
   // Radio is in IDLE following a TX, so strobe SRX to enter Receive Mode
+  Strobe(RF_SIDLE);
   Strobe( RF_SRX );
 
-  __no_operation();
+  receiving = 1;
 }
 
 void ReceiveOff(void)
@@ -92,6 +97,9 @@ void ReceiveOff(void)
   // such that the RXFIFO is empty prior to receiving a packet.
   Strobe(RF_SIDLE);
   Strobe(RF_SFRX);
+
+  receiving = 0;
+  StopRadioRxTimer();
 }
 
 
@@ -104,6 +112,7 @@ void ReceivePacket(void)
 
   __delay_cycles(33600);                     // Wait for bytes to fill in RX FIFO (MCLK = 12MHz, 2.8ms)
 
+  rxintervalcnt = 0;
   StartRadioRxTimer();
 }
 
@@ -115,7 +124,7 @@ void TransmitPacket(unsigned char len)
   RfHighGainModeEnable();
   RfPowerAmplifierEnable();
 
-  //Tranmit routine
+  //Transmit routine
   txBytesLeft = len;
   txPosition = 0;
   packetTransmit = 0;
@@ -163,10 +172,24 @@ void pktRxHandler(void) {
         // Update how many bytes are left to be received
         rxBytesLeft -= bytesInFifo;
 
+        DebugBuffer[rxintervalcnt] = bytesInFifo;
+        rxintervalcnt++;
+
         // Read from RX FIFO and store the data in rxBuffer
-        while (bytesInFifo--) {
-          RxBuffer[rxPosition] = ReadSingleReg(RXFIFO);
-          rxPosition++;
+
+        if(bytesInFifo<=rxBytesLeft){
+            while (bytesInFifo>3) {
+              RxBuffer[rxPosition] = ReadSingleReg(RXFIFO);
+              rxPosition++;
+              bytesInFifo--;
+            }
+
+        }
+        else{
+            while (bytesInFifo--) {
+              RxBuffer[rxPosition] = ReadSingleReg(RXFIFO);
+              rxPosition++;
+            }
         }
 
         if (!rxBytesLeft){
@@ -224,6 +247,7 @@ void pktTxHandler(void) {
               {
 
                 WriteSingleReg(TXFIFO, TxBuffer[txPosition]);
+                //DebugBuffer[txPosition] = TxBuffer[txPosition];
                 txPosition++;
               }
 
@@ -261,7 +285,6 @@ void pktTxHandler(void) {
 
 void TransmitData(unsigned char *data, unsigned char len){
     ReceiveOff();
-    receiving = 0;
     changeRfPacketLength(len);
     TxBuffer = data;
     TransmitPacket(len);
@@ -276,6 +299,7 @@ void radiotimerisr(void){
 
       if(packetReceived)
           __no_operation();
+          packetReceived = 0;
         //__bic_SR_register_on_exit(LPM3_bits);
     }
 
@@ -293,7 +317,8 @@ void radiotimerisr(void){
 void radioisr(void){
     if(!(RF1AIES & BIT9))                 // RX sync word received
         {
-        receiving = 1;
+        //receiving = 1;
+        incomingpacketflag = 1;
           __no_operation();
         }
         else while(1);                // trap
@@ -307,17 +332,18 @@ void radiomainloop(void){
             __no_operation(); // Nothing to do, let ISR's in timer rx packet
         }
 
-        if(!rxPacketStarted){
+        //if(!rxPacketStarted){
+        if(incomingpacketflag){
             // Setup new packet
+            incomingpacketflag = 0;
             ReceivePacket();
             rxPacketStarted = 1;
         }
-        }
+    }
 
-        if(!transmitting && !receiving)
-        {
-          ReceiveOn();
-        }
+    if(!transmitting & !receiving){
+        ReceiveOn();
+    }
 }
 
 void CreateTestRadioData(void){
@@ -346,7 +372,8 @@ void radiotestdatamainloop(){
 
 
 void RadioTestTimerIsr(void){
-    if(txtestdatatimercnt<3){
+    TA0CCR3  += TESTTIMERPERIOD;
+    if(txtestdatatimercnt<1){
         txtestdatatimercnt++;
     }
     else{

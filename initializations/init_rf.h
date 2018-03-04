@@ -13,5 +13,7 @@
 
 unsigned char init_radio(void);
 void changeRfPacketLength(unsigned char length);
+void radio_manual_calibration_idle(void);
+void radio_manual_idle(void);
 
 #endif /* INITIALIZATIONS_INIT_RF_H_ */
