@@ -192,4 +192,6 @@ void radiotestdatamainloop(void);
 
 void RadioTestTimerIsr(void);
 
+void FlushReceiveFifo(void);
+
 #endif /* RADIO_H_ */

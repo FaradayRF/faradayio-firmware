@@ -97,6 +97,7 @@ unsigned char init_radio(void){
 
     //Write RF core settings
     WriteRfSettings(&rfSettings);
+    WriteSingleReg(MCSM1,  0x0E);
 
     //Write PA table settings
     WriteSinglePATable(PATABLE_VAL);

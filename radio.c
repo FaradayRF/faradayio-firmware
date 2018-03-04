@@ -96,7 +96,7 @@ void ReceiveOff(void)
   // Therefore, it is necessary to flush the RX FIFO after issuing IDLE strobe
   // such that the RXFIFO is empty prior to receiving a packet.
   Strobe(RF_SIDLE);
-  Strobe(RF_SFRX);
+  //Strobe(RF_SFRX);
 
   receiving = 0;
   StopRadioRxTimer();
@@ -150,28 +150,45 @@ void TransmitPacket(unsigned char len)
 void pktRxHandler(void) {
   unsigned char RxStatus;
   unsigned char bytesInFifo;
+  unsigned char bytestoget;
 
   // Which state?
   RxStatus = Strobe(RF_SNOP);
 
   switch(RxStatus & CC430_STATE_MASK)
   {
+    case CC430_STATE_IDLE:
+        __no_operation();
+        //ReceiveOn();
+        break;
     case CC430_STATE_RX_OVERFLOW:
         //Flush RX FIFO
         Strobe(RF_SIDLE);
         Strobe(RF_SFRX);
         rxPacketStarted = 0;
         ReceiveOff();
+        FlushReceiveFifo();
         break;
     case CC430_STATE_TX_UNDERFLOW:
         __no_operation();
         break;
     case CC430_STATE_RX:
       // If there's anything in the RX FIFO....
-      if (bytesInFifo = MIN(rxBytesLeft, RxStatus & CC430_FIFO_BYTES_AVAILABLE_MASK))
+      bytesInFifo = MIN(rxBytesLeft, RxStatus & CC430_FIFO_BYTES_AVAILABLE_MASK);
+      if (bytesInFifo)
       {
         // Update how many bytes are left to be received
-        rxBytesLeft -= bytesInFifo;
+          if(rxBytesLeft - bytesInFifo == 0){
+              __no_operation();
+              rxBytesLeft -= bytesInFifo;
+              bytestoget = bytesInFifo;
+          }
+          else{
+              rxBytesLeft -= (bytesInFifo-3);
+              bytestoget = bytesInFifo-3;
+              __no_operation();
+          }
+
 
         DebugBuffer[rxintervalcnt] = bytesInFifo;
         rxintervalcnt++;
@@ -179,15 +196,15 @@ void pktRxHandler(void) {
         // Read from RX FIFO and store the data in rxBuffer
 
         if(bytesInFifo<=rxBytesLeft){
-            while (bytesInFifo>3) {
+            while (bytestoget) {
               RxBuffer[rxPosition] = ReadSingleReg(RXFIFO);
               rxPosition++;
-              bytesInFifo--;
+              bytestoget--;
             }
 
         }
         else{
-            while (bytesInFifo--) {
+            while (bytestoget--) {
               RxBuffer[rxPosition] = ReadSingleReg(RXFIFO);
               rxPosition++;
             }
@@ -200,6 +217,7 @@ void pktRxHandler(void) {
             rxPosition = 0;
             rxPacketStarted = 0;
             ReceiveOff();
+            FlushReceiveFifo();
             StopRadioRxTimer();
 
         }
@@ -262,6 +280,8 @@ void pktTxHandler(void) {
                 transmitting = 0;
                 packetTransmit = 1;
                 StopRadioTxTimer();
+                FlushReceiveFifo();
+                ReceiveOn();
               }
             }
             break;
@@ -298,10 +318,10 @@ void radiotimerisr(void){
 
       pktRxHandler();
 
-      if(packetReceived)
+      if(packetReceived){
           __no_operation();
           packetReceived = 0;
-        //__bic_SR_register_on_exit(LPM3_bits);
+      }
     }
 
     else if(transmitting)
@@ -381,4 +401,9 @@ void RadioTestTimerIsr(void){
         txtestdataflag = 1;
         txtestdatatimercnt = 0;
     }
+}
+
+void FlushReceiveFifo(void){
+    Strobe(RF_SIDLE);
+    Strobe(RF_SFRX);
 }
