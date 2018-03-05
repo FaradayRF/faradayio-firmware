@@ -15,55 +15,30 @@
 #include "initializations/init_rf.h"
 #include "initializations/init_timer.h"
 
-unsigned char packetReceived;
-unsigned char packetTransmit;
-
-unsigned char txBytesLeft = PACKET_LEN;           // +1 for length byte
-unsigned char txPosition = 0;
-unsigned char rxBytesLeft = PACKET_LEN+2;         // +2 for status bytes
-unsigned char rxPosition = 0;
-unsigned char lengthByteRead = 0;
-unsigned char rxPacketStarted = 0;
-
-unsigned char RxBufferLength = 0;
-unsigned char TxBufferLength = 0;
-unsigned char * _p_Buffer = 0;
-unsigned char buttonPressed = 0;
-unsigned int i = 0;
-unsigned char fifofillcount = 0;
-
-unsigned char transmitting = 0;
-unsigned char receiving = 0;
-
-unsigned char RxBuffer[PACKET_LEN+2] = {0};
-unsigned char DebugBuffer[PACKET_LEN+2] = {0};
-/*
-unsigned char TxBuffer[PACKET_LEN]= {
-    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
-    0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19,
-    0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29,
-    0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
-    0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49,
-    0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59,
-    0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69,
-    0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79,
-    0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89,
-    0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99,
-};
-*/
-
-unsigned char * TxBuffer;
-
-unsigned char data[253];
-struct RfTxBuffer RfTxBuffer1;
-
-volatile unsigned char test2;
-
-unsigned char txtestdataflag;
-unsigned int txtestdatatimercnt;
-unsigned char incomingpacketflag;
-
-unsigned char rxintervalcnt;
+/** @name Radio Variables
+*
+*   Variables used during transmitting, receiving, and debug of
+*   the CC430 radio module on Faraday.
+*
+*
+@{**/
+unsigned char packetReceivedFlag;            /**< Flag indicating that a new packet has been received. */
+unsigned char packetTransmitFlag;           /**< Flag indicating that a packet is being transmitted, set when initialized new transmission. */
+unsigned char txBytesLeft = PACKET_LEN;     /**< Variable that holds the current count of bytes left to transmit in the current packet. +1 for length byte */
+unsigned char txPosition = 0;               /**< Variable that holds the current buffer index position respective to the transmit buffer. */
+unsigned char rxBytesLeft = PACKET_LEN+2;   /**< Variable that holds the current count of bytes left to receive in the current packet. +2 for status bytes */
+unsigned char rxPosition = 0;               /**< Variable that holds the current buffer index position respective to the receive buffer. */
+unsigned char transmittingFlag = 0;         /**< Flag indicating that the radio module control algorithm logical state is in transmitting mode. */
+unsigned char receivingFlag = 0;            /**< Flag indicating that the radio module control algorithm logical state is in receiving mode. */
+unsigned char RxBuffer[PACKET_LEN+2] = {0}; /**< Array that is used to hold the bytes received from the radio module. */
+unsigned char * TxBuffer;                   /**< A global pointer used to point to the array bytes that is to be transmitted. */
+unsigned char testdataarray[253];           /**< A test array used to hold fake data that is to be transmitted. */
+struct RfTxBuffer RfTxBuffer1;              /**< A struct that holds information about expected packet length and pointer to the array to save received data into. */
+unsigned char txtestdataflag;               /**< A flag that indicates the main test transmission loop logic should initiate a test data transmission. */
+unsigned int txtestdatatimercnt;            /**< A counter used to count the interrations test transmitter timer, it is used to count to the predetermine trigger point creating a period interval.*/
+unsigned char incomingpacketflag;           /**< A flag indicating that a new packet is being received. */
+unsigned char rxintervalcnt;                /**< A test counter variable used to check how many iterations of getting from the receive FIFO were needed to receive a packet. */
+/** @}*/
 
 void ReceiveOn(void)
 {
@@ -83,7 +58,7 @@ void ReceiveOn(void)
   Strobe(RF_SIDLE);
   Strobe( RF_SRX );
 
-  receiving = 1;
+  receivingFlag = 1;
 }
 
 void ReceiveOff(void)
@@ -94,11 +69,11 @@ void ReceiveOff(void)
 
   // It is possible that ReceiveOff is called while radio is receiving a packet.
   // Therefore, it is necessary to flush the RX FIFO after issuing IDLE strobe
-  // such that the RXFIFO is empty prior to receiving a packet.
+  // such that the RXFIFO is empty prior to receivingFlag a packet.
   Strobe(RF_SIDLE);
   //Strobe(RF_SFRX);
 
-  receiving = 0;
+  receivingFlag = 0;
   StopRadioRxTimer();
 }
 
@@ -108,7 +83,7 @@ void ReceivePacket(void)
   //This should only be reinitialized when needed at the start of a NEW packet!
   rxBytesLeft = PACKET_LEN + 2;// Set maximum packet leng + 2 for appended bytes
   rxPosition = 0;
-  packetReceived = 0;
+  packetReceivedFlag = 0;
 
   __delay_cycles(33600);                     // Wait for bytes to fill in RX FIFO (MCLK = 12MHz, 2.8ms)
 
@@ -127,8 +102,8 @@ void TransmitPacket(unsigned char len)
   //Transmit routine
   txBytesLeft = len;
   txPosition = 0;
-  packetTransmit = 0;
-  transmitting = 1;
+  packetTransmitFlag = 0;
+  transmittingFlag = 1;
   Strobe( RF_STX );                         // Strobe STX
   StartRadioTxTimer();
 
@@ -193,7 +168,7 @@ void pktRxHandler(void) {
         DebugBuffer[rxintervalcnt] = bytesInFifo;
         rxintervalcnt++;
 
-        // Read from RX FIFO and store the data in rxBuffer
+        // Read from RX FIFO and store the testdataarray in rxBuffer
 
         if(bytesInFifo<=rxBytesLeft){
             while (bytestoget) {
@@ -212,8 +187,7 @@ void pktRxHandler(void) {
 
         if (!rxBytesLeft){
             packetReceived = 1;
-            receiving = 0;
-            lengthByteRead = 0;
+            receivingFlag = 0;
             rxPosition = 0;
             rxPacketStarted = 0;
             ReceiveOff();
@@ -231,7 +205,7 @@ void pktRxHandler(void) {
 
       rxPacketStarted = 0;
       rxBytesLeft = 0;
-      receiving = 0;
+      receivingFlag = 0;
       break;
   }
 } // pktRxHandler
@@ -277,8 +251,8 @@ void pktTxHandler(void) {
                 while(!(RF1AIFG & BIT9)); // poll RFIFG9 for TX end-of-packet
                 RF1AIES &= ~BIT9;      // End-of-packet TX interrupt
                 RF1AIFG &= ~BIT9;     // clear RFIFG9
-                transmitting = 0;
-                packetTransmit = 1;
+                transmittingFlag = 0;
+                packetTransmitFlag = 1;
                 StopRadioTxTimer();
                 FlushReceiveFifo();
                 ReceiveOn();
@@ -292,12 +266,12 @@ void pktTxHandler(void) {
             __no_operation();
             // No break here!
         default:
-            if(!packetTransmit)
-              packetTransmit = 1;
+            if(!packetTransmitFlag)
+              packetTransmitFlag = 1;
 
-            if (transmitting) {
+            if (transmittingFlag) {
                 if ((TxStatus & CC430_STATE_MASK) == CC430_STATE_IDLE) {
-                  transmitting = 0;
+                  transmittingFlag = 0;
                 }
             }
         break;
@@ -312,25 +286,25 @@ void TransmitData(unsigned char *data, unsigned char len){
 }
 
 void radiotimerisr(void){
-    if(receiving)
+    if(receivingFlag)
     {
       TA0CCR1 += RX_TIMER_PERIOD;                  // 16 cycles * 1/32768 = ~500 us
 
       pktRxHandler();
 
-      if(packetReceived){
+      if(packetReceivedFlag){
           __no_operation();
-          packetReceived = 0;
+          packetReceivedFlag = 0;
       }
     }
 
-    else if(transmitting)
+    else if(transmittingFlag)
     {
       TA0CCR1 += TX_TIMER_PERIOD;                  // 16 cycles * 1/32768 = ~500 us
 
       pktTxHandler();
 
-      if(packetTransmit)
+      if(packetTransmitFlag)
           __no_operation();
     }
 }
@@ -347,7 +321,7 @@ void radioisr(void){
 }
 
 void radiomainloop(void){
-    if(receiving)
+    if(receivingFlag)
         {
         if(rxPacketStarted){
             __no_operation(); // Nothing to do, let ISR's in timer rx packet
@@ -362,7 +336,7 @@ void radiomainloop(void){
         }
     }
 
-    if(!transmitting & !receiving){
+    if(!transmittingFlag & !receivingFlag){
         ReceiveOn();
     }
 }
@@ -371,15 +345,15 @@ void CreateTestRadioData(void){
     unsigned char i;
 
     for(i=0; i<253; i++){
-        data[i]= i;
+        testdataarray[i]= i;
     }
 
     RfTxBuffer1.len = 253;
-    RfTxBuffer1.data = data;
+    RfTxBuffer1.data = testdataarray;
 }
 
 void TransmitTestRadioData(void){
-    if(!transmitting){
+    if(!transmittingFlag){
     TransmitData((unsigned char *)RfTxBuffer1.data, 253);
     }
 }
