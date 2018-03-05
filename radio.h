@@ -87,8 +87,8 @@
 #define MIN(n,m) (((n) < (m)) ? (n) : (m))
 
 struct RfTxBuffer{
-    unsigned char len;
-    unsigned char * data;
+    unsigned char len; /**< Size of the data in bytes. Very useful if using data smaller than max length. */
+    unsigned char * data; /**< Pointer to the array containing the data to transmit */
 };
 
 
@@ -184,14 +184,49 @@ void radioisr(void);
  */
 void radiomainloop(void);
 
+
+/**
+ * This function creates fake data for use with testing the radio.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 3/4/2018
+ */
 void CreateTestRadioData(void);
 
+/**
+ * A simple function that transmits fake data for radio testing.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 3/4/2018
+ */
 void TransmitTestRadioData(void);
 
+/**
+ * This function produces a continous transmition of test data at a specific
+ * interval. This is the function to leave in the main program infinit loop
+ * that provides the "housekeeping" functionality of the program. The interval
+ * is determines by a "count" of timer interrupts.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 3/4/2018
+ */
 void radiotestdatamainloop(void);
 
+/**
+ * This routine should be run at every timer interrupt in the ISR routine when
+ * test data is needed to be transmitted.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 3/4/2018
+ */
 void RadioTestTimerIsr(void);
 
+/**
+ * This simple function flushes the RX FIFO of the CC430 radio module.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 3/4/2018
+ */
 void FlushReceiveFifo(void);
 
 #endif /* RADIO_H_ */
