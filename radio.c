@@ -38,6 +38,7 @@ unsigned char txtestdataflag;               /**< A flag that indicates the main 
 unsigned int txtestdatatimercnt;            /**< A counter used to count the interrations test transmitter timer, it is used to count to the predetermine trigger point creating a period interval.*/
 unsigned char incomingpacketflag;           /**< A flag indicating that a new packet is being received. */
 unsigned char rxintervalcnt;                /**< A test counter variable used to check how many iterations of getting from the receive FIFO were needed to receive a packet. */
+unsigned char rxPacketStartedFlag = 0;      /**< A flag indicating that a new packet reception is to be started */
 /** @}*/
 
 void ReceiveOn(void)
@@ -58,6 +59,7 @@ void ReceiveOn(void)
   Strobe(RF_SIDLE);
   Strobe( RF_SRX );
 
+  //Set receiving flag to 1 indicating active receive mode
   receivingFlag = 1;
 }
 
@@ -67,13 +69,13 @@ void ReceiveOff(void)
   RF1AIFG &= ~BIT9;                         // Clear pending IFG
   RF1AIES &= ~BIT9;                         // Switch back to to sync word
 
-  // It is possible that ReceiveOff is called while radio is receiving a packet.
-  // Therefore, it is necessary to flush the RX FIFO after issuing IDLE strobe
-  // such that the RXFIFO is empty prior to receivingFlag a packet.
+  //Set the radio module into IDLE mode
   Strobe(RF_SIDLE);
-  //Strobe(RF_SFRX);
 
+  //Set recieving flag to 0 indicate disabling of main logic receive functionality
   receivingFlag = 0;
+
+  //Stop the receive logic timer incase it was not stopped. (Should be stopped on completion of received packet).
   StopRadioRxTimer();
 }
 
@@ -84,28 +86,33 @@ void ReceivePacket(void)
   rxBytesLeft = PACKET_LEN + 2;// Set maximum packet leng + 2 for appended bytes
   rxPosition = 0;
   packetReceivedFlag = 0;
-
-  __delay_cycles(33600);                     // Wait for bytes to fill in RX FIFO (MCLK = 12MHz, 2.8ms)
-
   rxintervalcnt = 0;
+
+  //Wait for bytes to fill in RX FIFO (MCLK = 12MHz, 2.8ms)
+  __delay_cycles(33600);
+
+  //Start the packet receiver timer
   StartRadioRxTimer();
 }
 
 void TransmitPacket(unsigned char len)
 {
+    //Reset logic variables
+    txBytesLeft = len;
+    txPosition = 0;
+    packetTransmitFlag = 0;
+    transmittingFlag = 1;
 
-  //Setup CC1190
-  RfLowNoiseAmplifierDisable();
-  RfHighGainModeEnable();
-  RfPowerAmplifierEnable();
+    //Setup CC1190
+    RfLowNoiseAmplifierDisable();
+    RfHighGainModeEnable();
+    RfPowerAmplifierEnable();
 
-  //Transmit routine
-  txBytesLeft = len;
-  txPosition = 0;
-  packetTransmitFlag = 0;
-  transmittingFlag = 1;
-  Strobe( RF_STX );                         // Strobe STX
-  StartRadioTxTimer();
+    //Set radio module into transmit mode
+    Strobe( RF_STX );                         // Strobe STX
+
+    //Start the transmit packet timer
+    StartRadioTxTimer();
 
 }
 
@@ -114,7 +121,7 @@ void TransmitPacket(unsigned char len)
 //
 //  DESCRIPTION:
 //      This function is called every time a timer interrupt occurs. The
-//      function starts by retreiving the status byte. Every time the status
+//      function starts by retrieving the status byte. Every time the status
 //      byte indicates that there are available bytes in the RX FIFO, bytes are
 //      read from the RX FIFO and written to RxBuffer. This is done until the
 //      whole packet is received. If the status byte indicates that there has
@@ -123,54 +130,58 @@ void TransmitPacket(unsigned char len)
 //      function.
 //------------------------------------------------------------------------------
 void pktRxHandler(void) {
-  unsigned char RxStatus;
-  unsigned char bytesInFifo;
-  unsigned char bytestoget;
+  unsigned char RxStatus; /**< Variable that stores the radio module receiver status byte */
+  unsigned char bytesInFifo; /**< Stores the number of bytes that can be retrieved from the FIFO */
+  unsigned char bytestoget;  /** Stores the number of bytes to remove from the FIFO. Per user guide errors will occurs if final byte retrieve if the last byte is not the final by of a packet */
 
-  // Which state?
+  // Get the radio receiver state
   RxStatus = Strobe(RF_SNOP);
 
   switch(RxStatus & CC430_STATE_MASK)
   {
     case CC430_STATE_IDLE:
         __no_operation();
-        //ReceiveOn();
         break;
     case CC430_STATE_RX_OVERFLOW:
         //Flush RX FIFO
         Strobe(RF_SIDLE);
         Strobe(RF_SFRX);
-        rxPacketStarted = 0;
+
+        //Reset the packet started variable flag
+        rxPacketStartedFlag = 0;
+
+        //Turn the receiver off
         ReceiveOff();
+
+        //Flush the receiver FIFO
         FlushReceiveFifo();
         break;
     case CC430_STATE_TX_UNDERFLOW:
         __no_operation();
         break;
     case CC430_STATE_RX:
-      // If there's anything in the RX FIFO....
+      // Save number of bytes in FIFO either as the FIFO size or if smaller the remaining bytes needed for the current packet
       bytesInFifo = MIN(rxBytesLeft, RxStatus & CC430_FIFO_BYTES_AVAILABLE_MASK);
       if (bytesInFifo)
       {
-        // Update how many bytes are left to be received
+        //Update how many bytes are left to be received
           if(rxBytesLeft - bytesInFifo == 0){
+              //Final bytes of packet are in FIFO, OK to remove ALL bytes
               __no_operation();
               rxBytesLeft -= bytesInFifo;
               bytestoget = bytesInFifo;
           }
           else{
+              //Final bytes of the packet are NOT received, leave margin of bytes in FIFO to avoid error (see users guide)
               rxBytesLeft -= (bytesInFifo-3);
               bytestoget = bytesInFifo-3;
               __no_operation();
           }
 
-
-        DebugBuffer[rxintervalcnt] = bytesInFifo;
         rxintervalcnt++;
 
-        // Read from RX FIFO and store the testdataarray in rxBuffer
-
         if(bytesInFifo<=rxBytesLeft){
+            //If not the final bytes to retrieve from the FIFO get just the determied bytecount
             while (bytestoget) {
               RxBuffer[rxPosition] = ReadSingleReg(RXFIFO);
               rxPosition++;
@@ -179,6 +190,7 @@ void pktRxHandler(void) {
 
         }
         else{
+            //Get all bytes from FIFO @TODO Is this needed anymore? seems redundant with the above...
             while (bytestoget--) {
               RxBuffer[rxPosition] = ReadSingleReg(RXFIFO);
               rxPosition++;
@@ -186,27 +198,34 @@ void pktRxHandler(void) {
         }
 
         if (!rxBytesLeft){
-            packetReceived = 1;
+            //No bytes are left, final bytes of packet has been received. Reset variables and enable flags as needed
+            packetReceivedFlag = 1;
             receivingFlag = 0;
             rxPosition = 0;
-            rxPacketStarted = 0;
+            rxPacketStartedFlag = 0;
+
+            //Turn the receiver OFF and flush  (just incase)
             ReceiveOff();
             FlushReceiveFifo();
+
+            //Stop receiver timer
             StopRadioRxTimer();
 
         }
       }
       break;
     default:
-      if(!packetReceived)
-      {
-        packetReceived = 1;
-      }
+        //If no receiver state matches there is an error or packet is completed. @TODO I think I removed the IDLE case from causing this default so this would only be called in ERROR?
+        if(!packetReceivedFlag)
+        {
+        packetReceivedFlag = 1;
+        }
 
-      rxPacketStarted = 0;
-      rxBytesLeft = 0;
-      receivingFlag = 0;
-      break;
+        //Reset global receiver variables
+        rxPacketStartedFlag = 0;
+        rxBytesLeft = 0;
+        receivingFlag = 0;
+        break;
   }
 } // pktRxHandler
 
@@ -225,36 +244,44 @@ void pktTxHandler(void) {
     unsigned char freeSpaceInFifo;
     unsigned char TxStatus;
 
-    // Which state?
+    //Get the radio module transmitter state
     TxStatus = Strobe(RF_SNOP);
 
     switch (TxStatus & CC430_STATE_MASK) {
         case CC430_STATE_TX:
-            // If there's anything to transfer..
+            //Save into variable the current packet bytes left or current FIFO size, whichever is smaller.
             if (freeSpaceInFifo = MIN(txBytesLeft, TxStatus & CC430_FIFO_BYTES_AVAILABLE_MASK))
             {
               txBytesLeft -= freeSpaceInFifo;
-              fifofillcount+=1;
-
               while(freeSpaceInFifo--)
               {
-
                 WriteSingleReg(TXFIFO, TxBuffer[txPosition]);
-                DebugBuffer[txPosition] = TxBuffer[txPosition];
                 txPosition++;
               }
-
               if(!txBytesLeft)
               {
+                //Enable interrupt for the TX END-OF-PACKET flag
                 RF1AIES |= BIT9;      // End-of-packet TX interrupt
                 RF1AIFG &= ~BIT9;     // clear RFIFG9
+
+                //Wait for TX END-OF-PACKET interrupt flag
                 while(!(RF1AIFG & BIT9)); // poll RFIFG9 for TX end-of-packet
+
+                //Disable interrupt for the TX END-OF-PACKET flag
                 RF1AIES &= ~BIT9;      // End-of-packet TX interrupt
                 RF1AIFG &= ~BIT9;     // clear RFIFG9
+
+                //Reset transmitter logic variables
                 transmittingFlag = 0;
                 packetTransmitFlag = 1;
+
+                //Stop transmitter packet timer
                 StopRadioTxTimer();
+
+                //Flush receiver FIFO (Just incase) @TODO Is this really needed? I forget why I placed this here but probably in error.
                 FlushReceiveFifo();
+
+                //Put radio module into receive mode
                 ReceiveOn();
               }
             }
@@ -266,6 +293,7 @@ void pktTxHandler(void) {
             __no_operation();
             // No break here!
         default:
+            //If no radio module state matches there must be an error #TODO I've added a catch for IDLE so this is only an error state, for now.
             if(!packetTransmitFlag)
               packetTransmitFlag = 1;
 
@@ -279,11 +307,18 @@ void pktTxHandler(void) {
 } // pktTxHandler
 
 void TransmitData(unsigned char *data, unsigned char len){
+    //Turn receiver OFF
     ReceiveOff();
+
+    //Update the cc430 radio module hardware packet length register is correct
     changeRfPacketLength(len);
+
+    //Set global TxBuffer pointer to first index of the data array to be transmitted
     TxBuffer = data;
+
+    //Initialize the transmission of the intended packet
     TransmitPacket(len);
-}
+} // TransmitData
 
 void radiotimerisr(void){
     if(receivingFlag)
@@ -310,32 +345,35 @@ void radiotimerisr(void){
 }
 
 void radioisr(void){
-    if(!(RF1AIES & BIT9))                 // RX sync word received
+    // If RX sync word received
+    if(!(RF1AIES & BIT9))
         {
-        //receiving = 1;
+        //New packet is arriving, start flag to initiate receiver logic to receive packet
         incomingpacketflag = 1;
           __no_operation();
         }
-        else while(1);                // trap
+        else while(1);                // trap, this is an error state @TODO Is this needed???
 
 }
 
 void radiomainloop(void){
     if(receivingFlag)
         {
-        if(rxPacketStarted){
+        //If a new packet has already been started to be received @TODO Is this still useful, I think I put it here for debugging.
+        if(rxPacketStartedFlag){
             __no_operation(); // Nothing to do, let ISR's in timer rx packet
         }
 
-        //if(!rxPacketStarted){
+        //If a new packet is to be actively received
         if(incomingpacketflag){
-            // Setup new packet
+            //Setup new packet
             incomingpacketflag = 0;
             ReceivePacket();
-            rxPacketStarted = 1;
+            rxPacketStartedFlag = 1;
         }
     }
 
+    //Safety check to avoid a "deaf" radio state. If not transmitting or receiving enable the receiver mode
     if(!transmittingFlag & !receivingFlag){
         ReceiveOn();
     }
@@ -368,9 +406,11 @@ void radiotestdatamainloop(){
 
 void RadioTestTimerIsr(void){
     TA0CCR3  += TESTTIMERPERIOD;
+    //Counter is below the setpoint to initiate a test transmission, iterate the counter.
     if(txtestdatatimercnt<1){
         txtestdatatimercnt++;
     }
+    //If the counter has reached the intended count to initiate a transmission then  transmit
     else{
         txtestdataflag = 1;
         txtestdatatimercnt = 0;
