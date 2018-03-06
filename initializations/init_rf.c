@@ -102,9 +102,9 @@ unsigned char init_radio(void){
     //Write PA table settings
     WriteSinglePATable(PATABLE_VAL);
 
-    radio_manual_idle();
-    radio_manual_calibration_idle();
-    radio_manual_idle();
+    //radio_manual_idle();
+    //radio_manual_calibration_idle();
+    //radio_manual_idle();
 
     volatile unsigned char pllcaltest;
     pllcaltest = ReadSingleReg(FSCAL1);

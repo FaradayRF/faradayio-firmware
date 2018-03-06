@@ -70,7 +70,7 @@ void main (void)
     init_uart();
     init_radio();
     InitTimer();
-    StartTestTimer();
+    //StartTestTimer();
     StartRadioMainTimer();
     ReceiveOn();
 

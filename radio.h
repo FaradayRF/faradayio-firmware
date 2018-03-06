@@ -32,11 +32,6 @@
 #define  CRC_OK             (BIT7)
 
 /**
- * 0 dBm output
- */
-#define  PATABLE_VAL        (0x51)
-
-/**
  * Timer ISR period setting during receive
  */
 #define  RX_TIMER_PERIOD    (85)

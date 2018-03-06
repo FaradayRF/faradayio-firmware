@@ -1,6 +1,6 @@
 /**
  * @file radio.c
- * @brief This file controls the radio hardware perhiperal in both transmitting
+ * @brief This file controls the radio hardware peripheral in both transmitting
  * and receiving modes.
  *
  * @author Brenton Salmi, KB1LQD
