@@ -1,8 +1,10 @@
-/*
- * cc1190.c
+/**
+ * @file cc1190.c
+ * @brief This file controls the radio hardware of the CC1190 transmitter amplifier
+ * and reciever low noise amplifier on Faraday.
+ * @author Brenton Salmi, KB1LQD
  *
- *  Created on: Feb 21, 2018
- *      Author: KB1LQ
+ * @date 2/25/2018
  */
 
 #include "driverlib.h"

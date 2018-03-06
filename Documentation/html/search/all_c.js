@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['pmap',['pmap',['../group__pmap__api.html',1,'']]],
-  ['pmm',['pmm',['../group__pmm__api.html',1,'']]]
+  ['oa',['oa',['../group__oa__api.html',1,'']]]
 ];

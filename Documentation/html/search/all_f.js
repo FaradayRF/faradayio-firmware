@@ -1,8 +1,19 @@
 var searchData=
 [
-  ['tec',['tec',['../group__tec__api.html',1,'']]],
-  ['timer_5fa',['timer_a',['../group__timer__a__api.html',1,'']]],
-  ['timer_5fb',['timer_b',['../group__timer__b__api.html',1,'']]],
-  ['timer_5fd',['timer_d',['../group__timer__d__api.html',1,'']]],
-  ['tlv',['tlv',['../group__tlv__api.html',1,'']]]
+  ['s_5frf_5fsettings',['S_RF_SETTINGS',['../struct_s___r_f___s_e_t_t_i_n_g_s.html',1,'']]],
+  ['sd24_5fb',['sd24_b',['../group__sd24__b__api.html',1,'']]],
+  ['selftest_5ffifo_5fbuffer',['selftest_fifo_buffer',['../fifo_8h.html#aaf7bbb022ac23a2ef394150f2cc9f54d',1,'fifo.h']]],
+  ['selftest_5fstate_5fmachine',['selftest_state_machine',['../fifo_8h.html#a0cd28528118311b5d211c73704b02bf2',1,'fifo.h']]],
+  ['sfr',['sfr',['../group__sfr__api.html',1,'']]],
+  ['spiclk',['SPICLK',['../init__spi_8c.html#afd196d9b1d680711b2be6a32aab3bb9f',1,'init_spi.c']]],
+  ['startradiomaintimer',['StartRadioMainTimer',['../init__timer_8c.html#a38fb004970b11aa21214c4e0c2d2c715',1,'StartRadioMainTimer(void):&#160;init_timer.c'],['../init__timer_8h.html#a38fb004970b11aa21214c4e0c2d2c715',1,'StartRadioMainTimer(void):&#160;init_timer.c']]],
+  ['startradiorxtimer',['StartRadioRxTimer',['../init__timer_8c.html#a540614b2f3707c0f9b822ed2b5bbc8c9',1,'StartRadioRxTimer(void):&#160;init_timer.c'],['../init__timer_8h.html#a540614b2f3707c0f9b822ed2b5bbc8c9',1,'StartRadioRxTimer(void):&#160;init_timer.c']]],
+  ['startradiotxtimer',['StartRadioTxTimer',['../init__timer_8c.html#a7d04dc15ac42d18f72ac359147fb3b79',1,'StartRadioTxTimer(void):&#160;init_timer.c'],['../init__timer_8h.html#a7d04dc15ac42d18f72ac359147fb3b79',1,'StartRadioTxTimer(void):&#160;init_timer.c']]],
+  ['starttesttimer',['StartTestTimer',['../init__timer_8c.html#adb876639590092f7b36922ffb51d1e20',1,'StartTestTimer(void):&#160;init_timer.c'],['../init__timer_8h.html#adb876639590092f7b36922ffb51d1e20',1,'StartTestTimer(void):&#160;init_timer.c']]],
+  ['status',['status',['../init__ucs_8h.html#a5393c99e246925076b1dfd69a64177ef',1,'init_ucs.h']]],
+  ['stopradiomaintimer',['StopRadioMainTimer',['../init__timer_8c.html#a82600a1443b62584c69a4a32605db7a1',1,'StopRadioMainTimer(void):&#160;init_timer.c'],['../init__timer_8h.html#a82600a1443b62584c69a4a32605db7a1',1,'StopRadioMainTimer(void):&#160;init_timer.c']]],
+  ['stopradiorxtimer',['StopRadioRxTimer',['../init__timer_8c.html#a6939a2feae28754da0f138c2ecc94613',1,'StopRadioRxTimer(void):&#160;init_timer.c'],['../init__timer_8h.html#a6939a2feae28754da0f138c2ecc94613',1,'StopRadioRxTimer(void):&#160;init_timer.c']]],
+  ['stopradiotxtimer',['StopRadioTxTimer',['../init__timer_8c.html#acf4de1cf55f660a4d215d152be1b167d',1,'StopRadioTxTimer(void):&#160;init_timer.c'],['../init__timer_8h.html#acf4de1cf55f660a4d215d152be1b167d',1,'StopRadioTxTimer(void):&#160;init_timer.c']]],
+  ['stoptesttimer',['StopTestTimer',['../init__timer_8c.html#a237e04d5f9827972dcd54cfe3ca42265',1,'StopTestTimer(void):&#160;init_timer.c'],['../init__timer_8h.html#a237e04d5f9827972dcd54cfe3ca42265',1,'StopTestTimer(void):&#160;init_timer.c']]],
+  ['sysctl',['sysctl',['../group__sysctl__api.html',1,'']]]
 ];
