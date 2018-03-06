@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['status',['status',['../init__ucs_8h.html#a5393c99e246925076b1dfd69a64177ef',1,'init_ucs.h']]]
+  ['buffer_5fsize',['buffer_size',['../struct_f_i_f_o___buffer___state___machine.html#a2a0484a5686f3c473e720462aba197bb',1,'FIFO_Buffer_State_Machine']]]
 ];

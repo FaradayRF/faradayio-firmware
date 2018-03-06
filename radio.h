@@ -14,7 +14,7 @@
 /**
  * PACKET_LEN > FIFO Size
  */
-#define  PACKET_LEN         (100)
+#define  PACKET_LEN         (253)
 
 /**
  * Index of appended RSSI
@@ -30,11 +30,6 @@
  * CRC_OK bit
  */
 #define  CRC_OK             (BIT7)
-
-/**
- * 0 dBm output
- */
-#define  PATABLE_VAL        (0x51)
 
 /**
  * Timer ISR period setting during receive
@@ -86,6 +81,12 @@
  */
 #define MIN(n,m) (((n) < (m)) ? (n) : (m))
 
+struct RfTxBuffer{
+    unsigned char len; /**< Size of the data in bytes. Very useful if using data smaller than max length. */
+    unsigned char * data; /**< Pointer to the array containing the data to transmit */
+};
+
+
 /**
  * This function enables the CC430 radio module into active receive mode.
  *
@@ -117,8 +118,10 @@ void ReceivePacket(void);
  *
  * @author Brenton Salmi, KB1LQD
  * @date 2/25/2018
+ *
+ * @param len Length of data to transmit
  */
-void TransmitPacket(void);
+void TransmitPacket(unsigned char len);
 
 /**
  * This is the function used to actively query for new portions of a packet
@@ -144,8 +147,11 @@ void pktTxHandler(void);
  *
  * @author Brenton Salmi, KB1LQD
  * @date 2/25/2018
+ *
+ * @param data Pointer to data to transmit
+ * @param len Length of data to transmit
  */
-void TransmitData(unsigned char *data);
+void TransmitData(unsigned char *data, unsigned char len);
 
 /**
  * Function that contains the logic sequences for transmit and receive operation
@@ -172,5 +178,50 @@ void radioisr(void);
  * @date 2/25/2018
  */
 void radiomainloop(void);
+
+
+/**
+ * This function creates fake data for use with testing the radio.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 3/4/2018
+ */
+void CreateTestRadioData(void);
+
+/**
+ * A simple function that transmits fake data for radio testing.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 3/4/2018
+ */
+void TransmitTestRadioData(void);
+
+/**
+ * This function produces a continous transmition of test data at a specific
+ * interval. This is the function to leave in the main program infinit loop
+ * that provides the "housekeeping" functionality of the program. The interval
+ * is determines by a "count" of timer interrupts.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 3/4/2018
+ */
+void radiotestdatamainloop(void);
+
+/**
+ * This routine should be run at every timer interrupt in the ISR routine when
+ * test data is needed to be transmitted.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 3/4/2018
+ */
+void RadioTestTimerIsr(void);
+
+/**
+ * This simple function flushes the RX FIFO of the CC430 radio module.
+ *
+ * @author Brenton Salmi, KB1LQD
+ * @date 3/4/2018
+ */
+void FlushReceiveFifo(void);
 
 #endif /* RADIO_H_ */

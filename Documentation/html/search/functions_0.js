@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['initialize_5fucs',['initialize_ucs',['../init__ucs_8c.html#accc9520e997fa124b5414e490e3f01c5',1,'initialize_ucs(void):&#160;init_ucs.c'],['../init__ucs_8h.html#accc9520e997fa124b5414e490e3f01c5',1,'initialize_ucs(void):&#160;init_ucs.c']]]
+  ['changerfpacketlength',['changeRfPacketLength',['../init__rf_8c.html#af2ba427c454bc0ecf317843dc76e8de4',1,'changeRfPacketLength(unsigned char length):&#160;init_rf.c'],['../init__rf_8h.html#af2ba427c454bc0ecf317843dc76e8de4',1,'changeRfPacketLength(unsigned char length):&#160;init_rf.c']]],
+  ['createtestradiodata',['CreateTestRadioData',['../radio_8c.html#a9efdd6e539538afe612495f43f9248f3',1,'CreateTestRadioData(void):&#160;radio.c'],['../radio_8h.html#a9efdd6e539538afe612495f43f9248f3',1,'CreateTestRadioData(void):&#160;radio.c']]]
 ];

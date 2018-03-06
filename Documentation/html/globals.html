@@ -25,7 +25,7 @@
    <div id="projectname">FaradayIO
    &#160;<span id="projectnumber">1</span>
    </div>
-   <div id="projectbrief">Firmware for the Faraday radio hardware that supports the FaradayIO network interface functionality.</div>
+   <div id="projectbrief">Open source digital amateur radio for 900MHz</div>
   </td>
  </tr>
  </tbody>
@@ -64,25 +64,392 @@ $(function() {
 </div>
 
 <div class="contents">
-<div class="textblock">Here is a list of all documented functions, variables, defines, enums, and typedefs with links to the documentation:</div><ul>
-<li>initialize_ucs()
-: <a class="el" href="init__ucs_8c.html#accc9520e997fa124b5414e490e3f01c5">init_ucs.c</a>
-, <a class="el" href="init__ucs_8h.html#accc9520e997fa124b5414e490e3f01c5">init_ucs.h</a>
+<div class="textblock">Here is a list of all documented functions, variables, defines, enums, and typedefs with links to the documentation:</div>
+
+<h3><a id="index_c"></a>- c -</h3><ul>
+<li>CC430_FIFO_BYTES_AVAILABLE_MASK
+: <a class="el" href="radio_8h.html#a83e1f5481d9bc3b037f41afce9c85ace">radio.h</a>
 </li>
+<li>CC430_STATE_IDLE
+: <a class="el" href="radio_8h.html#a004e67fd02bd22b6b2d112dd3e50ff4b">radio.h</a>
+</li>
+<li>CC430_STATE_MASK
+: <a class="el" href="radio_8h.html#a340ae20d26c361de8b4e5dabaa365664">radio.h</a>
+</li>
+<li>CC430_STATE_RX
+: <a class="el" href="radio_8h.html#abf965fd034638a3d7189127f6a63b132">radio.h</a>
+</li>
+<li>CC430_STATE_RX_OVERFLOW
+: <a class="el" href="radio_8h.html#a32419fab72d50ea26cf3477e53888dd2">radio.h</a>
+</li>
+<li>CC430_STATE_TX
+: <a class="el" href="radio_8h.html#a0efcbe57555b18cff8080d718b6998dd">radio.h</a>
+</li>
+<li>CC430_STATE_TX_UNDERFLOW
+: <a class="el" href="radio_8h.html#ac8326594a8de3e60a4f024e8f46e6cd1">radio.h</a>
+</li>
+<li>changeRfPacketLength()
+: <a class="el" href="init__rf_8c.html#af2ba427c454bc0ecf317843dc76e8de4">init_rf.c</a>
+, <a class="el" href="init__rf_8h.html#af2ba427c454bc0ecf317843dc76e8de4">init_rf.h</a>
+</li>
+<li>CRC_LQI_IDX
+: <a class="el" href="radio_8h.html#a685e32598813c818d28605cb6cdc4da3">radio.h</a>
+</li>
+<li>CRC_OK
+: <a class="el" href="radio_8h.html#a6e747c4b63385af3521c8587c46c503d">radio.h</a>
+</li>
+<li>CreateTestRadioData()
+: <a class="el" href="radio_8h.html#a9efdd6e539538afe612495f43f9248f3">radio.h</a>
+, <a class="el" href="radio_8c.html#a9efdd6e539538afe612495f43f9248f3">radio.c</a>
+</li>
+</ul>
+
+
+<h3><a id="index_f"></a>- f -</h3><ul>
+<li>fifo_empty()
+: <a class="el" href="fifo_8c.html#ad55127878e8aa95260e003865765eb70">fifo.c</a>
+, <a class="el" href="fifo_8h.html#ad55127878e8aa95260e003865765eb70">fifo.h</a>
+</li>
+<li>fifo_selftest()
+: <a class="el" href="fifo_8h.html#a6d2ef05db029717dc102a393f7ea3ed9">fifo.h</a>
+, <a class="el" href="fifo_8c.html#a6d2ef05db029717dc102a393f7ea3ed9">fifo.c</a>
+</li>
+<li>FlushReceiveFifo()
+: <a class="el" href="radio_8h.html#a7d29d3306e7b634b5f4152dc52a4c8ad">radio.h</a>
+, <a class="el" href="radio_8c.html#a7d29d3306e7b634b5f4152dc52a4c8ad">radio.c</a>
+</li>
+</ul>
+
+
+<h3><a id="index_g"></a>- g -</h3><ul>
+<li>get_fifo()
+: <a class="el" href="fifo_8c.html#a1e652e643bffe40efb1a11e39fab79c0">fifo.c</a>
+, <a class="el" href="fifo_8h.html#a1e652e643bffe40efb1a11e39fab79c0">fifo.h</a>
+</li>
+</ul>
+
+
+<h3><a id="index_h"></a>- h -</h3><ul>
+<li>HGM_SELECT
+: <a class="el" href="cc1190_8h.html#aaba43d027a30671adb51ae1b3d38a57e">cc1190.h</a>
+</li>
+</ul>
+
+
+<h3><a id="index_i"></a>- i -</h3><ul>
+<li>incomingpacketflag
+: <a class="el" href="radio_8c.html#a6a3a6f03a6841a74175a808671aed831">radio.c</a>
+</li>
+<li>init_gpio_spi()
+: <a class="el" href="init__gpio_8c.html#a62028000fe3ac45603a160d3f5e181fe">init_gpio.c</a>
+, <a class="el" href="init__gpio_8h.html#a62028000fe3ac45603a160d3f5e181fe">init_gpio.h</a>
+</li>
+<li>init_radio()
+: <a class="el" href="init__rf_8c.html#a67dabb6b1cb01a0912bfe7ddd61d2dbc">init_rf.c</a>
+, <a class="el" href="init__rf_8h.html#a67dabb6b1cb01a0912bfe7ddd61d2dbc">init_rf.h</a>
+</li>
+<li>init_self_test_fifo()
+: <a class="el" href="fifo_8c.html#a0aebc58caf1d7efb7f5b086903ecbd88">fifo.c</a>
+, <a class="el" href="fifo_8h.html#a0aebc58caf1d7efb7f5b086903ecbd88">fifo.h</a>
+</li>
+<li>init_spi()
+: <a class="el" href="init__spi_8c.html#a4bbc938aeda611e8eb0e3f13205c6d3d">init_spi.c</a>
+, <a class="el" href="init__spi_8h.html#a4bbc938aeda611e8eb0e3f13205c6d3d">init_spi.h</a>
+</li>
+<li>init_uart()
+: <a class="el" href="init__uart_8h.html#a761482219401a5f183f2d451a76d9ae7">init_uart.h</a>
+</li>
+<li>initialize_ucs()
+: <a class="el" href="init__ucs_8h.html#accc9520e997fa124b5414e490e3f01c5">init_ucs.h</a>
+, <a class="el" href="init__ucs_8c.html#accc9520e997fa124b5414e490e3f01c5">init_ucs.c</a>
+</li>
+<li>InitTimer()
+: <a class="el" href="init__timer_8h.html#a4472695bac138b033a3d7fcd42dd3153">init_timer.h</a>
+, <a class="el" href="init__timer_8c.html#a4472695bac138b033a3d7fcd42dd3153">init_timer.c</a>
+</li>
+</ul>
+
+
+<h3><a id="index_l"></a>- l -</h3><ul>
+<li>LNA_ENABLE
+: <a class="el" href="cc1190_8h.html#a05453799ce2f594bc73cd5ceaaa631d3">cc1190.h</a>
+</li>
+</ul>
+
+
+<h3><a id="index_m"></a>- m -</h3><ul>
 <li>main()
 : <a class="el" href="main_8c.html#a6288eba0f8e8ad3ab1544ad731eb7667">main.c</a>
 </li>
+<li>MIN
+: <a class="el" href="radio_8h.html#a6dfd57d9273a64266cb1b29e5a1f3929">radio.h</a>
+</li>
+</ul>
+
+
+<h3><a id="index_n"></a>- n -</h3><ul>
 <li>NMI_ISR()
 : <a class="el" href="main_8c.html#a218a5747a3785b143c62b6f09d13e717">main.c</a>
 </li>
+</ul>
+
+
+<h3><a id="index_p"></a>- p -</h3><ul>
+<li>PA_ENABLE
+: <a class="el" href="cc1190_8h.html#a03d8a3cfd38ec5b486574866d25e7160">cc1190.h</a>
+</li>
+<li>PACKET_LEN
+: <a class="el" href="radio_8h.html#acd54b77567a38dda64d852dd6ee378a8">radio.h</a>
+</li>
+<li>packetReceivedFlag
+: <a class="el" href="radio_8c.html#a334b9b5a0eb0c6591d4ee28544be6659">radio.c</a>
+</li>
+<li>packetTransmitFlag
+: <a class="el" href="radio_8c.html#aef14781800a84b9db92779f2bddba739">radio.c</a>
+</li>
+<li>pktRxHandler()
+: <a class="el" href="radio_8c.html#a151a667c044580d989fd5cb1ddf2f221">radio.c</a>
+, <a class="el" href="radio_8h.html#a151a667c044580d989fd5cb1ddf2f221">radio.h</a>
+</li>
+<li>pktTxHandler()
+: <a class="el" href="radio_8c.html#a25b1808dde8cc4d9c47e1d307de6b6a6">radio.c</a>
+, <a class="el" href="radio_8h.html#a25b1808dde8cc4d9c47e1d307de6b6a6">radio.h</a>
+</li>
+<li>put_fifo()
+: <a class="el" href="fifo_8c.html#ad6b4e3e49b5248674b948edaac915c9c">fifo.c</a>
+, <a class="el" href="fifo_8h.html#ad6b4e3e49b5248674b948edaac915c9c">fifo.h</a>
+</li>
+</ul>
+
+
+<h3><a id="index_r"></a>- r -</h3><ul>
+<li>radio_manual_calibration_idle()
+: <a class="el" href="init__rf_8c.html#a5e5481c3eefc3a661d7b0c0393de05bd">init_rf.c</a>
+, <a class="el" href="init__rf_8h.html#a5e5481c3eefc3a661d7b0c0393de05bd">init_rf.h</a>
+</li>
+<li>radio_manual_idle()
+: <a class="el" href="init__rf_8h.html#a59792c6361b90d6430934955c3b39f45">init_rf.h</a>
+, <a class="el" href="init__rf_8c.html#a59792c6361b90d6430934955c3b39f45">init_rf.c</a>
+</li>
+<li>radioisr()
+: <a class="el" href="radio_8c.html#a71e186ede3fd1a4fd8b4587aba32528a">radio.c</a>
+, <a class="el" href="radio_8h.html#a71e186ede3fd1a4fd8b4587aba32528a">radio.h</a>
+</li>
+<li>radiomainloop()
+: <a class="el" href="radio_8h.html#a592969ccd69bfbe017745110b45cc48e">radio.h</a>
+, <a class="el" href="radio_8c.html#a592969ccd69bfbe017745110b45cc48e">radio.c</a>
+</li>
+<li>RADIOMAINTIMERPERIOD
+: <a class="el" href="init__timer_8h.html#a6d7a7475da95e4cd0f382db2bdaacec4">init_timer.h</a>
+</li>
+<li>radiotestdatamainloop()
+: <a class="el" href="radio_8c.html#ae878a5853216c8a9196042ac2cd5b4b6">radio.c</a>
+, <a class="el" href="radio_8h.html#ab1245b87ee4f2f4abb1bff32d991a22e">radio.h</a>
+</li>
+<li>RadioTestTimerIsr()
+: <a class="el" href="radio_8c.html#a0f001c4dab28f169052c412c389b98c0">radio.c</a>
+, <a class="el" href="radio_8h.html#a0f001c4dab28f169052c412c389b98c0">radio.h</a>
+</li>
+<li>radiotimerisr()
+: <a class="el" href="radio_8c.html#a910ec5c792869f121c2a601cd352fb5c">radio.c</a>
+, <a class="el" href="radio_8h.html#a910ec5c792869f121c2a601cd352fb5c">radio.h</a>
+</li>
+<li>receiveData
+: <a class="el" href="init__spi_8c.html#a216001f02f93a2c0b512c1b8724bdc60">init_spi.c</a>
+, <a class="el" href="init__spi_8h.html#a216001f02f93a2c0b512c1b8724bdc60">init_spi.h</a>
+</li>
+<li>ReceiveOff()
+: <a class="el" href="radio_8c.html#a0cc0d5e5853672c1dad2de570e667c40">radio.c</a>
+, <a class="el" href="radio_8h.html#a0cc0d5e5853672c1dad2de570e667c40">radio.h</a>
+</li>
+<li>ReceiveOn()
+: <a class="el" href="radio_8c.html#a6016f0e70f4b3cd74db476e3bd55189e">radio.c</a>
+, <a class="el" href="radio_8h.html#a6016f0e70f4b3cd74db476e3bd55189e">radio.h</a>
+</li>
+<li>ReceivePacket()
+: <a class="el" href="radio_8c.html#a746a70cf6e9df1b071c38952e0a6b797">radio.c</a>
+, <a class="el" href="radio_8h.html#a746a70cf6e9df1b071c38952e0a6b797">radio.h</a>
+</li>
+<li>receivingFlag
+: <a class="el" href="radio_8c.html#aaf1164125e1f3e321375e3f6df67e2c9">radio.c</a>
+</li>
+<li>returnValue
+: <a class="el" href="init__spi_8c.html#ace921b5af751ec7156af51e685288544">init_spi.c</a>
+, <a class="el" href="init__spi_8h.html#ace921b5af751ec7156af51e685288544">init_spi.h</a>
+</li>
+<li>RfHighGainModeDisable()
+: <a class="el" href="cc1190_8c.html#a3409420906420c1b448de2f66c6e4369">cc1190.c</a>
+, <a class="el" href="cc1190_8h.html#a3409420906420c1b448de2f66c6e4369">cc1190.h</a>
+</li>
+<li>RfHighGainModeEnable()
+: <a class="el" href="cc1190_8c.html#a3b9d287bd1be2dfa93571f2cb1dfa408">cc1190.c</a>
+, <a class="el" href="cc1190_8h.html#a3b9d287bd1be2dfa93571f2cb1dfa408">cc1190.h</a>
+</li>
+<li>RfLowNoiseAmplifierDisable()
+: <a class="el" href="cc1190_8c.html#a9f3bca14f5e2f5981e6cb0419f8534b2">cc1190.c</a>
+, <a class="el" href="cc1190_8h.html#a9f3bca14f5e2f5981e6cb0419f8534b2">cc1190.h</a>
+</li>
+<li>RfLowNoiseAmplifierEnable()
+: <a class="el" href="cc1190_8c.html#a110d6594ce18b2b2eca6b97f0454132b">cc1190.c</a>
+, <a class="el" href="cc1190_8h.html#a110d6594ce18b2b2eca6b97f0454132b">cc1190.h</a>
+</li>
+<li>RfPowerAmplifierDisable()
+: <a class="el" href="cc1190_8h.html#adb9d15212dc149ada2862be3dda65276">cc1190.h</a>
+, <a class="el" href="cc1190_8c.html#adb9d15212dc149ada2862be3dda65276">cc1190.c</a>
+</li>
+<li>RfPowerAmplifierEnable()
+: <a class="el" href="cc1190_8h.html#a3598b136805f8905f193f4a9dd72db79">cc1190.h</a>
+, <a class="el" href="cc1190_8c.html#a3598b136805f8905f193f4a9dd72db79">cc1190.c</a>
+</li>
+<li>RfTxBuffer1
+: <a class="el" href="radio_8c.html#ac6041a86c479044786d9353093dca1a7">radio.c</a>
+</li>
+<li>RSSI_IDX
+: <a class="el" href="radio_8h.html#ae81337261d71fed84b8cae6c9acbced5">radio.h</a>
+</li>
+<li>RX_TIMER_PERIOD
+: <a class="el" href="radio_8h.html#a725133c44dbd90e614517de2fd34dccf">radio.h</a>
+, <a class="el" href="init__timer_8h.html#a725133c44dbd90e614517de2fd34dccf">init_timer.h</a>
+</li>
+<li>RxBuffer
+: <a class="el" href="radio_8c.html#a2cdb45f8fa8b2efc3b0a351b30507a87">radio.c</a>
+</li>
+<li>rxBytesLeft
+: <a class="el" href="radio_8c.html#a4f83163defc2c7bceaed27b30c22905a">radio.c</a>
+</li>
+<li>rxintervalcnt
+: <a class="el" href="radio_8c.html#a1d13da5688dea31b17a5df73767ffa65">radio.c</a>
+</li>
+<li>rxPacketStartedFlag
+: <a class="el" href="radio_8c.html#aa51f60bfb86bd26e7d229935eb748d3d">radio.c</a>
+</li>
+<li>rxPosition
+: <a class="el" href="radio_8c.html#ae0d7a7abc0166d80ffdd2ccbe627a28c">radio.c</a>
+</li>
+</ul>
+
+
+<h3><a id="index_s"></a>- s -</h3><ul>
+<li>selftest_fifo_buffer
+: <a class="el" href="fifo_8h.html#aaf7bbb022ac23a2ef394150f2cc9f54d">fifo.h</a>
+</li>
+<li>selftest_state_machine
+: <a class="el" href="fifo_8h.html#a0cd28528118311b5d211c73704b02bf2">fifo.h</a>
+</li>
+<li>SPICLK
+: <a class="el" href="init__spi_8c.html#afd196d9b1d680711b2be6a32aab3bb9f">init_spi.c</a>
+</li>
+<li>StartRadioMainTimer()
+: <a class="el" href="init__timer_8c.html#a38fb004970b11aa21214c4e0c2d2c715">init_timer.c</a>
+, <a class="el" href="init__timer_8h.html#a38fb004970b11aa21214c4e0c2d2c715">init_timer.h</a>
+</li>
+<li>StartRadioRxTimer()
+: <a class="el" href="init__timer_8c.html#a540614b2f3707c0f9b822ed2b5bbc8c9">init_timer.c</a>
+, <a class="el" href="init__timer_8h.html#a540614b2f3707c0f9b822ed2b5bbc8c9">init_timer.h</a>
+</li>
+<li>StartRadioTxTimer()
+: <a class="el" href="init__timer_8c.html#a7d04dc15ac42d18f72ac359147fb3b79">init_timer.c</a>
+, <a class="el" href="init__timer_8h.html#a7d04dc15ac42d18f72ac359147fb3b79">init_timer.h</a>
+</li>
+<li>StartTestTimer()
+: <a class="el" href="init__timer_8c.html#adb876639590092f7b36922ffb51d1e20">init_timer.c</a>
+, <a class="el" href="init__timer_8h.html#adb876639590092f7b36922ffb51d1e20">init_timer.h</a>
+</li>
 <li>status
 : <a class="el" href="init__ucs_8h.html#a5393c99e246925076b1dfd69a64177ef">init_ucs.h</a>
+</li>
+<li>StopRadioMainTimer()
+: <a class="el" href="init__timer_8c.html#a82600a1443b62584c69a4a32605db7a1">init_timer.c</a>
+, <a class="el" href="init__timer_8h.html#a82600a1443b62584c69a4a32605db7a1">init_timer.h</a>
+</li>
+<li>StopRadioRxTimer()
+: <a class="el" href="init__timer_8h.html#a6939a2feae28754da0f138c2ecc94613">init_timer.h</a>
+, <a class="el" href="init__timer_8c.html#a6939a2feae28754da0f138c2ecc94613">init_timer.c</a>
+</li>
+<li>StopRadioTxTimer()
+: <a class="el" href="init__timer_8c.html#acf4de1cf55f660a4d215d152be1b167d">init_timer.c</a>
+, <a class="el" href="init__timer_8h.html#acf4de1cf55f660a4d215d152be1b167d">init_timer.h</a>
+</li>
+<li>StopTestTimer()
+: <a class="el" href="init__timer_8h.html#a237e04d5f9827972dcd54cfe3ca42265">init_timer.h</a>
+, <a class="el" href="init__timer_8c.html#a237e04d5f9827972dcd54cfe3ca42265">init_timer.c</a>
+</li>
+</ul>
+
+
+<h3><a id="index_t"></a>- t -</h3><ul>
+<li>testdataarray
+: <a class="el" href="radio_8c.html#a523c0af1ff75910147e9e8bd454d755e">radio.c</a>
+</li>
+<li>TESTTIMERPERIOD
+: <a class="el" href="init__timer_8h.html#a15fec0f0c40ab32cac3ee1c1623cc3be">init_timer.h</a>
+</li>
+<li>transmitData
+: <a class="el" href="init__spi_8h.html#ac23b8f721ac5b7a4315ba2c3409b9e0a">init_spi.h</a>
+</li>
+<li>TransmitData()
+: <a class="el" href="radio_8c.html#a042b7212d2fe2059247e78601bcb79b9">radio.c</a>
+</li>
+<li>transmitData
+: <a class="el" href="init__spi_8c.html#ac23b8f721ac5b7a4315ba2c3409b9e0a">init_spi.c</a>
+</li>
+<li>TransmitData()
+: <a class="el" href="radio_8h.html#a042b7212d2fe2059247e78601bcb79b9">radio.h</a>
+</li>
+<li>TransmitPacket()
+: <a class="el" href="radio_8h.html#a31381808533f33a71da5495f400483b0">radio.h</a>
+, <a class="el" href="radio_8c.html#a31381808533f33a71da5495f400483b0">radio.c</a>
+</li>
+<li>TransmitTestRadioData()
+: <a class="el" href="radio_8c.html#a9750c8d1d77d5977fe03f6030b798dd1">radio.c</a>
+, <a class="el" href="radio_8h.html#a9750c8d1d77d5977fe03f6030b798dd1">radio.h</a>
+</li>
+<li>transmittingFlag
+: <a class="el" href="radio_8c.html#a1082a5d739eb274a4210f0b5eee708bc">radio.c</a>
+</li>
+<li>TX_TIMER_PERIOD
+: <a class="el" href="radio_8h.html#a568d2d1c74a83306b90d3565aadb87c3">radio.h</a>
+, <a class="el" href="init__timer_8h.html#a568d2d1c74a83306b90d3565aadb87c3">init_timer.h</a>
+</li>
+<li>TxBuffer
+: <a class="el" href="radio_8c.html#ae4044619ef97ba75f5dafb88dd011320">radio.c</a>
+</li>
+<li>txBytesLeft
+: <a class="el" href="radio_8c.html#acc31b45e2254f18d6b89ee0b696ebf05">radio.c</a>
+</li>
+<li>txPosition
+: <a class="el" href="radio_8c.html#a254def7d9ee3db96c73f308b3cc4aa13">radio.c</a>
+</li>
+<li>txtestdataflag
+: <a class="el" href="radio_8c.html#a8b6c2481d4e7323ba2b99f7f19e2dff8">radio.c</a>
+</li>
+<li>txtestdatatimercnt
+: <a class="el" href="radio_8c.html#ae088307fed62275b3d4f960b033911d3">radio.c</a>
+</li>
+</ul>
+
+
+<h3><a id="index_u"></a>- u -</h3><ul>
+<li>uartreceivedData
+: <a class="el" href="init__uart_8h.html#ab9e5908f3822c2b3bd96fe0a4ba5dae5">init_uart.h</a>
+, <a class="el" href="uart_8h.html#ab9e5908f3822c2b3bd96fe0a4ba5dae5">uart.h</a>
+</li>
+<li>uartselftest()
+: <a class="el" href="uart_8h.html#ad3901b434e60fd7ac164e06b0991e86d">uart.h</a>
+, <a class="el" href="uart_8c.html#ad3901b434e60fd7ac164e06b0991e86d">uart.c</a>
+</li>
+<li>uarttransmitbyte()
+: <a class="el" href="uart_8c.html#af1a5f6ba31787ac612bd3edccc29d8f5">uart.c</a>
+, <a class="el" href="uart_8h.html#af1a5f6ba31787ac612bd3edccc29d8f5">uart.h</a>
 </li>
 <li>UCS_MCLK_DESIRED_FREQUENCY_IN_KHZ
 : <a class="el" href="init__ucs_8c.html#afc76af036ff44bb1fa7d614635294e0b">init_ucs.c</a>
 </li>
 <li>UCS_MCLK_FLLREF_RATIO
 : <a class="el" href="init__ucs_8c.html#a19063967df2303b3934689ed75d2ec08">init_ucs.c</a>
+</li>
+<li>USCI_B0_ISR()
+: <a class="el" href="main_8c.html#abb8ec2e0335e1b8389161437129cc39a">main.c</a>
 </li>
 </ul>
 </div><!-- contents -->

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['init_5fucs_2ec',['init_ucs.c',['../init__ucs_8c.html',1,'']]],
-  ['init_5fucs_2eh',['init_ucs.h',['../init__ucs_8h.html',1,'']]]
+  ['cc1190_2ec',['cc1190.c',['../cc1190_8c.html',1,'']]],
+  ['cc1190_2eh',['cc1190.h',['../cc1190_8h.html',1,'']]]
 ];
